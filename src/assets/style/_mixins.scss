@@ -1,0 +1,9 @@
+@mixin cardHover {
+  transition: transform 0.3s ease 0s;
+  cursor: pointer;
+  @media (any-hover: hover) {
+    &:hover {
+      transform: scale(1.01);
+    }
+  }
+}

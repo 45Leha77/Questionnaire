@@ -1,0 +1,10 @@
+<form [formGroup]="form">
+  <div formArrayName="answers">
+    <div *ngFor="let answers of answers.controls; let i = index">
+      <mat-form-field appearance="fill">
+        <mat-label>input your answer</mat-label>
+        <input matInput [formControlName]="i" placeholder="input your answer" />
+      </mat-form-field>
+    </div>
+  </div>
+</form>

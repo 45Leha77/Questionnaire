@@ -1,0 +1,14 @@
+@import "src/assets/style/mixins";
+
+.question-manage {
+  &__cards {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 15px;
+    margin-top: 25px;
+  }
+
+  mat-card {
+    @include cardHover;
+  }
+}

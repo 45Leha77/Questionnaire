@@ -1,0 +1,33 @@
+<section class="question-manage">
+  <div class="question-manage__cards">
+    <mat-card *ngFor="let card of cards">
+      <mat-card-title>Question card №{{ card.id }}</mat-card-title>
+      <mat-card-subtitle>
+        Date: {{ card.date | date }}, type: {{ card.type }}, answered:
+        {{ card.answered }}
+      </mat-card-subtitle>
+      <p>{{ card.question }}</p>
+      <app-single-card
+        *ngIf="card.type === 'single'"
+        [card]="card"
+        [mode]="'manage'"
+      ></app-single-card>
+      <app-multiple-card
+        *ngIf="card.type === 'multiple'"
+        [card]="card"
+        [mode]="'manage'"
+      ></app-multiple-card>
+      <app-open-card
+        *ngIf="card.type === 'open'"
+        [card]="card"
+        [mode]="'manage'"
+      ></app-open-card>
+      <mat-card-actions align="end">
+        <button mat-button (click)="onDelete(card.id)">Delete</button>
+        <button mat-button routerLink="../edit" [queryParams]="{ id: card.id }">
+          Edit
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</section>

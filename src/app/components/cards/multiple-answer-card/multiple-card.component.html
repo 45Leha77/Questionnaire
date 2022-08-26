@@ -1,0 +1,13 @@
+<form [formGroup]="form">
+  <div formArrayName="answers">
+    <ul>
+      <li *ngFor="let answer of answers.controls; let j = index">
+        <div [formGroupName]="j">
+          <mat-checkbox formControlName="inp">
+            {{ answer.value.text }}
+          </mat-checkbox>
+        </div>
+      </li>
+    </ul>
+  </div>
+</form>

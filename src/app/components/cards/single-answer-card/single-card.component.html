@@ -1,0 +1,17 @@
+<form [formGroup]="form">
+  <div formArrayName="answers">
+    <div *ngFor="let answer of answers.controls; let i = index">
+      <div [formGroupName]="i">
+        <mat-radio-group
+          name="radio {{ card.id }}"
+          aria-label="Select an option"
+          formControlName="radio"
+        >
+          <mat-radio-button name="radio {{ card.id }}" [value]="true">
+            {{ answer.value.text }}
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+  </div>
+</form>

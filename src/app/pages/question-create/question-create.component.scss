@@ -1,0 +1,20 @@
+.page-question-create {
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    margin: 20px 0;
+    padding: 10px 20px;
+    background-color: whitesmoke;
+  }
+
+  &__radio-buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  &__cards {
+    display: flex;
+    flex-direction: column;
+  }
+}

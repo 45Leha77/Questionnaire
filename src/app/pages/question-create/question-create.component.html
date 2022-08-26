@@ -1,0 +1,87 @@
+<section class="page-question-create">
+  <div class="page-question-create__top">
+    <mat-radio-group class="page-question-create__radio-buttons">
+      <mat-radio-button
+        *ngFor="let type of questionTypesList"
+        [value]="type"
+        (change)="onChange(type)"
+        [checked]="type === questionType"
+      >
+        {{ type }}
+      </mat-radio-button>
+    </mat-radio-group>
+    <button
+      [disabled]="questionType === 'open'"
+      mat-raised-button
+      color="primary"
+      (click)="addAnswer()"
+    >
+      Add Answer
+    </button>
+  </div>
+  <div class="page-question-create__cards">
+    <mat-card>
+      <mat-card-title>Question card</mat-card-title>
+      <mat-card-subtitle>Date</mat-card-subtitle>
+      <form [formGroup]="form">
+        <mat-form-field appearance="fill">
+          <mat-label>Input your question</mat-label>
+          <input matInput formControlName="question" />
+        </mat-form-field>
+
+        <div formArrayName="singles">
+          <div *ngFor="let single of singles.controls; let i = index">
+            <div [formGroupName]="i">
+              <mat-radio-group
+                name="radio {{ card.id }}"
+                aria-label="Select an option"
+                formControlName="radio"
+              >
+                <mat-radio-button name="radio {{ card.id }}" [value]="true">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Input your question</mat-label>
+                    <input matInput formControlName="text" />
+                  </mat-form-field>
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+        </div>
+
+        <div formArrayName="multiples">
+          <ul>
+            <li *ngFor="let multiple of multiples.controls; let j = index">
+              <div [formGroupName]="j">
+                <mat-checkbox formControlName="input">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Input your question</mat-label>
+                    <input matInput formControlName="text" />
+                  </mat-form-field>
+                </mat-checkbox>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div formArrayName="open">
+          <div *ngFor="let op of open.controls; let ind = index">
+            <mat-form-field appearance="fill">
+              <mat-label>input your answer</mat-label>
+              <input
+                matInput
+                [formControlName]="ind"
+                placeholder="input your answer"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+      <mat-card-actions align="end">
+        <button mat-raised-button color="primary" (click)="onSubmit()">
+          Submit
+        </button>
+        <button mat-raised-button color="warn" (click)="clearAnswers()">Undo</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</section>

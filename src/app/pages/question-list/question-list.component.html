@@ -1,0 +1,64 @@
+<div class="question-list-page">
+  <div class="field">
+    <mat-card *ngFor="let card of unanswered">
+      <mat-card-title>Question card{{ card.id }}</mat-card-title>
+      <mat-card-subtitle>Date: {{ card.date | date }}</mat-card-subtitle>
+      <p>{{ card.question }}</p>
+      <app-single-card
+        *ngIf="card.type === 'single'"
+        [card]="card"
+        (change)="onChange($event)"
+      ></app-single-card>
+      <app-multiple-card
+        *ngIf="card.type === 'multiple'"
+        [card]="card"
+        (change)="onChange($event)"
+      ></app-multiple-card>
+      <app-open-card
+        *ngIf="card.type === 'open'"
+        [card]="card"
+        (change)="onChange($event)"
+      ></app-open-card>
+      <mat-card-actions align="end">
+        <button
+          mat-button
+          type="submit"
+          form="unanswered"
+          (click)="onSubmit(card)"
+          [disabled]="isSubmitDisabled(card.id)"
+        >
+          Submit
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <div class="field field--answered">
+    <mat-card *ngFor="let card of answered">
+      <mat-card-title>Question card{{ card.id }}</mat-card-title>
+      <mat-card-subtitle>
+        Date: {{ card.date | date }}, Answer date:
+        {{ card.answerDate | date: "medium" }}
+      </mat-card-subtitle>
+      <p>{{ card.question }}</p>
+      <app-single-card
+        *ngIf="card.type === 'single'"
+        [card]="card"
+        (change)="onChange($event)"
+      ></app-single-card>
+      <app-multiple-card
+        *ngIf="card.type === 'multiple'"
+        [card]="card"
+        (change)="onChange($event)"
+      ></app-multiple-card>
+      <app-open-card
+        *ngIf="card.type === 'open'"
+        [card]="card"
+        (change)="onChange($event)"
+      ></app-open-card>
+      <mat-card-actions align="end">
+        <button mat-button (click)="OnUndo(card)">Undo</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
