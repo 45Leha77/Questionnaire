@@ -11,7 +11,7 @@
       </mat-radio-button>
     </mat-radio-group>
     <button
-      [disabled]="questionType === 'open'"
+      [disabled]="questionType === cardType.open"
       mat-raised-button
       color="primary"
       (click)="addAnswer()"
@@ -80,7 +80,9 @@
         <button mat-raised-button color="primary" (click)="onSubmit()">
           Submit
         </button>
-        <button mat-raised-button color="warn" (click)="clearAnswers()">Undo</button>
+        <button mat-raised-button color="warn" (click)="clearAnswers()">
+          Undo
+        </button>
       </mat-card-actions>
     </mat-card>
   </div>

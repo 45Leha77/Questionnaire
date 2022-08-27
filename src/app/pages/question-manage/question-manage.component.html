@@ -8,17 +8,17 @@
       </mat-card-subtitle>
       <p>{{ card.question }}</p>
       <app-single-card
-        *ngIf="card.type === 'single'"
+        *ngIf="card.type === cardType.single"
         [card]="card"
         [mode]="'manage'"
       ></app-single-card>
       <app-multiple-card
-        *ngIf="card.type === 'multiple'"
+        *ngIf="card.type === cardType.multiple"
         [card]="card"
         [mode]="'manage'"
       ></app-multiple-card>
       <app-open-card
-        *ngIf="card.type === 'open'"
+        *ngIf="card.type === cardType.open"
         [card]="card"
         [mode]="'manage'"
       ></app-open-card>

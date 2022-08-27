@@ -2,20 +2,22 @@
   <div class="field">
     <mat-card *ngFor="let card of unanswered">
       <mat-card-title>Question card{{ card.id }}</mat-card-title>
-      <mat-card-subtitle>Date: {{ card.date | date }}</mat-card-subtitle>
+      <mat-card-subtitle
+        >Creation Date: {{ card.date | date }}</mat-card-subtitle
+      >
       <p>{{ card.question }}</p>
       <app-single-card
-        *ngIf="card.type === 'single'"
+        *ngIf="card.type === cardType.single"
         [card]="card"
         (change)="onChange($event)"
       ></app-single-card>
       <app-multiple-card
-        *ngIf="card.type === 'multiple'"
+        *ngIf="card.type === cardType.multiple"
         [card]="card"
         (change)="onChange($event)"
       ></app-multiple-card>
       <app-open-card
-        *ngIf="card.type === 'open'"
+        *ngIf="card.type === cardType.open"
         [card]="card"
         (change)="onChange($event)"
       ></app-open-card>
@@ -37,7 +39,7 @@
     <mat-card *ngFor="let card of answered">
       <mat-card-title>Question card{{ card.id }}</mat-card-title>
       <mat-card-subtitle>
-        Date: {{ card.date | date }}, Answer date:
+        Creation Date: {{ card.date | date }}, Answer date:
         {{ card.answerDate | date: "medium" }}
       </mat-card-subtitle>
       <p>{{ card.question }}</p>
@@ -57,7 +59,7 @@
         (change)="onChange($event)"
       ></app-open-card>
       <mat-card-actions align="end">
-        <button mat-button (click)="OnUndo(card)">Undo</button>
+        <button mat-button (click)="onUndo(card)">Undo</button>
       </mat-card-actions>
     </mat-card>
   </div>

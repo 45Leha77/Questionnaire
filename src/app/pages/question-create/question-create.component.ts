@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CardType } from 'src/app/enums/card-type';
 
 import {
   QuestionCard,
@@ -18,8 +19,9 @@ import { UnsubscribeService } from 'src/app/services/unsubscribe.service';
   providers: [UnsubscribeService],
 })
 export class QuestionCreateComponent {
-  public questionTypesList: QuestionsTypes[] = ['single', 'multiple', 'open'];
-  public questionType: QuestionsTypes = 'single';
+  public cardType = CardType;
+  public questionTypesList: CardType[] = Object.values(this.cardType);
+  public questionType: QuestionsTypes = this.cardType.single;
   public card: QuestionCard = {
     id: 0,
     type: '',
@@ -82,15 +84,15 @@ export class QuestionCreateComponent {
   }
 
   public addAnswer(): void {
-    if (this.questionType == 'single') {
+    if (this.questionType === this.cardType.single) {
       this.addSingleAnswer();
     }
 
-    if (this.questionType == 'multiple') {
+    if (this.questionType === this.cardType.multiple) {
       this.addMultipleAnswer();
     }
 
-    if (this.questionType == 'open') {
+    if (this.questionType == this.cardType.open) {
       this.card = {
         ...this.card,
         open: true,
@@ -122,7 +124,7 @@ export class QuestionCreateComponent {
   }
 
   private addAnswersToCard(): void {
-    if (this.card.type == 'single') {
+    if (this.card.type === this.cardType.single) {
       let single: Answer[] = [];
       this.form.value.singles.forEach((singleData: any) => {
         single.push({ value: singleData.text });
@@ -130,7 +132,7 @@ export class QuestionCreateComponent {
       this.card.single = single;
     }
 
-    if (this.card.type == 'multiple') {
+    if (this.card.type === this.cardType.multiple) {
       let multiple: Answer[] = [];
       this.form.value.multiples.forEach((multipleData: any) => {
         multiple.push({ value: multipleData.text });

@@ -11,7 +11,7 @@
       </mat-radio-button>
     </mat-radio-group>
     <button
-      [disabled]="questionType === 'open'"
+      [disabled]="questionType === cardType.open"
       mat-raised-button
       color="primary"
       (click)="addAnswer()"

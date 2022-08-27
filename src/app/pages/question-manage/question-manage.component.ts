@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CardType } from 'src/app/enums/card-type';
 
 import { QuestionCard } from 'src/app/models/interfaces';
 import { LocalStorageService } from 'src/app/services/localStorage.service';
@@ -11,10 +12,11 @@ import { LocalStorageService } from 'src/app/services/localStorage.service';
 })
 export class QuestionManageComponent {
   public cards: QuestionCard[] = this.localStorage.getCards();
+  public cardType = CardType;
 
   constructor(private localStorage: LocalStorageService) {}
 
-  public onDelete(id: number) {
+  public onDelete(id: number): void {
     this.localStorage.deleteCard(id);
     this.cards = this.localStorage.getCards();
   }

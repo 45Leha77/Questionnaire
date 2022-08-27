@@ -67,35 +67,18 @@ export class SingleCardComponent implements OnInit {
   }
 
   private addAnswer(answer: Answer, index: number): void {
+    let radio: object | [] = {};
     if (this.mode === 'manage') {
-      this.answers.push(
-        this.fb.group({
-          text: answer.value,
-          radio: { value: '', disabled: true },
-        })
-      );
+      radio = { value: '', disabled: true };
     }
-
     if (this.mode === 'list') {
       if (this.card.answered) {
-        let value: boolean = false;
-        if (this.card.singleValue === index) {
-          value = true;
-        }
-        this.answers.push(
-          this.fb.group({
-            text: answer.value,
-            radio: { value: value, disabled: true },
-          })
-        );
+        const value = this.card.singleValue === index ? true : false;
+        radio = { value: value, disabled: true };
       } else {
-        this.answers.push(
-          this.fb.group({
-            text: answer.value,
-            radio: [false],
-          })
-        );
+        radio = [false];
       }
     }
+    this.answers.push(this.fb.group({ text: answer.value, radio }));
   }
 }

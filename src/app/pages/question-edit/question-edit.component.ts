@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { map, takeUntil, tap } from 'rxjs';
+import { filter, map, takeUntil, tap } from 'rxjs';
+import { CardType } from 'src/app/enums/card-type';
 
 import {
   QuestionCard,
@@ -19,7 +20,8 @@ import { UnsubscribeService } from 'src/app/services/unsubscribe.service';
   providers: [UnsubscribeService],
 })
 export class QuestionEditComponent implements OnInit {
-  public questionTypesList: QuestionsTypes[] = ['single', 'multiple', 'open'];
+  public cardType = CardType;
+  public questionTypesList: CardType[] = Object.values(this.cardType);
   public questionType!: QuestionsTypes;
   public card!: QuestionCard;
   public form: FormGroup = this.fb.group({
@@ -33,23 +35,21 @@ export class QuestionEditComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
-    private unSubscribe: UnsubscribeService
+    private unsubscribe: UnsubscribeService
   ) {}
 
   ngOnInit(): void {
+    this.route.queryParamMap;
     this.route.queryParamMap
       .pipe(
-        map((param: ParamMap) => {
-          return param.get('id');
+        map((param: ParamMap) => param.get('id')),
+        filter((id) => !!id),
+        tap((id) => {
+          this.card = this.localStorage.getCardById(+id!);
+          this.questionType = this.card.type;
+          this.updateForm();
         }),
-        tap((id: string | null) => {
-          if (!!id) {
-            this.card = this.localStorage.getCardById(+id);
-            this.questionType = this.card.type;
-            this.updateForm();
-          }
-        }),
-        takeUntil(this.unSubscribe.destroy$)
+        takeUntil(this.unsubscribe.destroy$)
       )
       .subscribe();
   }
@@ -78,15 +78,15 @@ export class QuestionEditComponent implements OnInit {
   }
 
   public addAnswer(): void {
-    if (this.questionType == 'single') {
+    if (this.questionType == this.cardType.single) {
       this.addSingleAnswer();
     }
 
-    if (this.questionType == 'multiple') {
+    if (this.questionType == this.cardType.multiple) {
       this.addMultipleAnswer();
     }
 
-    if (this.questionType == 'open') {
+    if (this.questionType == this.cardType.open) {
       this.card = {
         ...this.card,
         open: true,
@@ -115,7 +115,7 @@ export class QuestionEditComponent implements OnInit {
     );
   }
 
-  private addMultipleAnswer(answer?: Answer) {
+  private addMultipleAnswer(answer?: Answer): void {
     this.multiples.push(
       this.fb.group({
         text: answer ? answer.value : 'input your answer',
@@ -128,18 +128,18 @@ export class QuestionEditComponent implements OnInit {
     this.open.push(this.fb.control('Open answer'));
   }
 
-  private updateForm() {
+  private updateForm(): void {
     this.form.patchValue({ question: this.card.question });
 
-    if (this.card.type == 'open') {
+    if (this.card.type === this.cardType.open) {
       this.addOpenAnswer();
     }
-    if (this.card.type == 'single') {
+    if (this.card.type === this.cardType.single) {
       this.card.single.forEach((single: Answer) => {
         this.addSingleAnswer(single);
       });
     }
-    if (this.card.type == 'multiple') {
+    if (this.card.type === this.cardType.multiple) {
       this.card.multiple.forEach((multiple: Answer) => {
         this.addMultipleAnswer(multiple);
       });
@@ -147,7 +147,7 @@ export class QuestionEditComponent implements OnInit {
   }
 
   private addAnswersToCard(): void {
-    if (this.card.type == 'single') {
+    if (this.card.type === this.cardType.single) {
       let single: Answer[] = [];
       this.form.value.singles.forEach((singleData: any) => {
         single.push({ value: singleData.text });
@@ -155,7 +155,7 @@ export class QuestionEditComponent implements OnInit {
       this.card.single = single;
     }
 
-    if (this.card.type == 'multiple') {
+    if (this.card.type == this.cardType.multiple) {
       let multiple: Answer[] = [];
       this.form.value.multiples.forEach((multipleData: any) => {
         multiple.push({ value: multipleData.text });

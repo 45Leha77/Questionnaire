@@ -23,3 +23,8 @@ export interface CardValidator {
   isValid: boolean;
   id: number;
 }
+
+export interface AnswerFormValue {
+  text: string;
+  inp: boolean;
+}
