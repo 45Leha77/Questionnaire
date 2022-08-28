@@ -1,24 +1,8 @@
 <section class="page-question-create">
-  <div class="page-question-create__top">
-    <mat-radio-group class="page-question-create__radio-buttons">
-      <mat-radio-button
-        *ngFor="let type of questionTypesList"
-        [value]="type"
-        (change)="onChange(type)"
-        [checked]="type === questionType"
-      >
-        {{ type }}
-      </mat-radio-button>
-    </mat-radio-group>
-    <button
-      [disabled]="questionType === cardType.open"
-      mat-raised-button
-      color="primary"
-      (click)="addAnswer()"
-    >
-      Add Answer
-    </button>
-  </div>
+  <app-question-type-switch-panel
+    (radioButtonChange)="onChange($event)"
+    (addAnswer)="addAnswer()"
+  ></app-question-type-switch-panel>
   <div class="page-question-create__cards">
     <mat-card>
       <mat-card-title>Question card</mat-card-title>

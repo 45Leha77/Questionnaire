@@ -19,12 +19,10 @@ import { UnsubscribeService } from 'src/app/services/unsubscribe.service';
   providers: [UnsubscribeService],
 })
 export class QuestionCreateComponent {
-  public cardType = CardType;
-  public questionTypesList: CardType[] = Object.values(this.cardType);
-  public questionType: QuestionsTypes = this.cardType.single;
+  public questionType: QuestionsTypes | undefined = undefined;
   public card: QuestionCard = {
     id: 0,
-    type: '',
+    type: undefined,
     question: 'Input your question',
     single: [],
     multiple: [],
@@ -39,6 +37,7 @@ export class QuestionCreateComponent {
     multiples: this.fb.array([]),
     open: this.fb.array([]),
   });
+  private cardType = CardType;
   constructor(
     private localStorage: LocalStorageService,
     private router: Router,
@@ -71,12 +70,6 @@ export class QuestionCreateComponent {
     this.router.navigateByUrl('/manage');
   }
 
-  public clearAnswers(): void {
-    this.singles.clear();
-    this.multiples.clear();
-    this.open.clear();
-  }
-
   public onChange(type: QuestionsTypes): void {
     this.clearAnswers();
     this.questionType = type;
@@ -101,6 +94,12 @@ export class QuestionCreateComponent {
     }
   }
 
+  public clearAnswers(): void {
+    this.singles.clear();
+    this.multiples.clear();
+    this.open.clear();
+  }
+
   private addSingleAnswer(): void {
     this.singles.push(
       this.fb.group({
@@ -120,7 +119,7 @@ export class QuestionCreateComponent {
   }
 
   private addOpenAnswer(): void {
-    this.open.push(this.fb.control('Open Answer'));
+    this.open.push(this.fb.control('open'));
   }
 
   private addAnswersToCard(): void {

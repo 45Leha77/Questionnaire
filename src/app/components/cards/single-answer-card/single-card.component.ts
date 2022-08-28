@@ -9,7 +9,7 @@ import {
 import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import { takeUntil, tap } from 'rxjs';
 
-import { validateRadioButton } from 'src/app/models/custom-validators';
+import { validateRadioButton } from 'src/app/shared/validators/custom-validators';
 import { QuestionCard, CardValidator, Answer } from 'src/app/models/interfaces';
 import { UnsubscribeService } from 'src/app/services/unsubscribe.service';
 import { Required } from 'src/app/shared/decorators/required.decorator';
@@ -67,10 +67,7 @@ export class SingleCardComponent implements OnInit {
   }
 
   private addAnswer(answer: Answer, index: number): void {
-    let radio: object | [] = {};
-    if (this.mode === 'manage') {
-      radio = { value: '', disabled: true };
-    }
+    let radio: object | [] = { value: '', disabled: true };
     if (this.mode === 'list') {
       if (this.card.answered) {
         const value = this.card.singleValue === index ? true : false;

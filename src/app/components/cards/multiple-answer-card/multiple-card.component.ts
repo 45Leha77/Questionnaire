@@ -9,7 +9,7 @@ import {
 import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import { filter, takeUntil, tap } from 'rxjs';
 
-import { validateCheckBox } from 'src/app/models/custom-validators';
+import { validateCheckBox } from 'src/app/shared/validators/custom-validators';
 import {
   QuestionCard,
   CardValidator,
@@ -70,10 +70,7 @@ export class MultipleCardComponent implements OnInit {
   }
 
   private addAnswer(answer: Answer, index: number): void {
-    let inp: object | [] = {};
-    if (this.mode === 'manage') {
-      inp = { value: '', disabled: true };
-    }
+    let inp: object | [] = { value: '', disabled: true };
     if (this.mode === 'list') {
       if (this.card.answered) {
         inp = {

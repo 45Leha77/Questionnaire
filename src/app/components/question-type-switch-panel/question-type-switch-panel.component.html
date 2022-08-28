@@ -1,0 +1,20 @@
+<div class="question-type-switch-panel">
+  <mat-radio-group class="question-type-switch-panel__radio-buttons">
+    <mat-radio-button
+      *ngFor="let type of questionTypesList"
+      [value]="type"
+      (change)="onChange(type)"
+      [checked]="type === questionType"
+    >
+      {{ type }}
+    </mat-radio-button>
+  </mat-radio-group>
+  <button
+    [disabled]="questionType === cardType.open"
+    mat-raised-button
+    color="primary"
+    (click)="onAddAnswer()"
+  >
+    Add Answer
+  </button>
+</div>

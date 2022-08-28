@@ -55,20 +55,21 @@ export class OpenCardComponent implements OnInit {
   }
 
   private addAnswer(): void {
-    if (this.mode === 'manage') {
-      this.answers.push(this.fb.control({ value: '', disabled: true }));
-    }
-
     if (this.mode === 'list') {
-      if (this.card.answered) {
-        this.answers.push(
-          this.fb.control({ value: this.card.openAnswerValue!, disabled: true })
-        );
-      } else {
-        this.answers.push(
-          this.fb.control('', [Validators.required, Validators.maxLength(255)])
-        );
-      }
+      return this.card.answered
+        ? this.answers.push(
+            this.fb.control({
+              value: this.card.openAnswerValue,
+              disabled: true,
+            })
+          )
+        : this.answers.push(
+            this.fb.control('', [
+              Validators.required,
+              Validators.maxLength(255),
+            ])
+          );
     }
+    return this.answers.push(this.fb.control({ value: '', disabled: true }));
   }
 }

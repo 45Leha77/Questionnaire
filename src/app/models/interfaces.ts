@@ -1,4 +1,4 @@
-export type QuestionsTypes = 'single' | 'multiple' | 'open' | '';
+export type QuestionsTypes = 'single' | 'multiple' | 'open';
 
 export interface Answer {
   value: string;
@@ -6,7 +6,7 @@ export interface Answer {
 
 export interface QuestionCard {
   id: number;
-  type: QuestionsTypes;
+  type?: QuestionsTypes;
   question: string;
   single: Answer[];
   singleValue?: number;
@@ -27,4 +27,9 @@ export interface CardValidator {
 export interface AnswerFormValue {
   text: string;
   inp: boolean;
+}
+
+export interface AnswerRadioFormValue {
+  text: string;
+  radio: boolean;
 }

@@ -1,0 +1,10 @@
+mat-button-toggle-group {
+  font-size: 25px;
+  border: none;
+  display: inline-flex;
+  gap: 5px;
+  mat-button-toggle {
+    padding: 10px;
+    min-width: 115px;
+  }
+}

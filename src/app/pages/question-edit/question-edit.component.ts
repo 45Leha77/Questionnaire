@@ -20,9 +20,7 @@ import { UnsubscribeService } from 'src/app/services/unsubscribe.service';
   providers: [UnsubscribeService],
 })
 export class QuestionEditComponent implements OnInit {
-  public cardType = CardType;
-  public questionTypesList: CardType[] = Object.values(this.cardType);
-  public questionType!: QuestionsTypes;
+  public questionType: QuestionsTypes | undefined = undefined;
   public card!: QuestionCard;
   public form: FormGroup = this.fb.group({
     question: 'Input your question',
@@ -30,6 +28,7 @@ export class QuestionEditComponent implements OnInit {
     multiples: this.fb.array([]),
     open: this.fb.array([]),
   });
+  private cardType = CardType;
   constructor(
     private localStorage: LocalStorageService,
     private router: Router,
@@ -125,7 +124,7 @@ export class QuestionEditComponent implements OnInit {
   }
 
   private addOpenAnswer(): void {
-    this.open.push(this.fb.control('Open answer'));
+    this.open.push(this.fb.control('open'));
   }
 
   private updateForm(): void {

@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { QuestionEditComponent } from './question-edit.component';
-import { MaterialExampleModule } from 'src/app/material.module';
+import { MaterialModule } from 'src/app/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { QuestionEditRoutingModule } from './question-edit-routing.module';
+import { QuestionTypeSwitchPanelModule } from 'src/app/components/question-type-switch-panel/question-type-switch-panel.module';
 
 @NgModule({
   declarations: [QuestionEditComponent],
@@ -12,7 +13,8 @@ import { QuestionEditRoutingModule } from './question-edit-routing.module';
     FormsModule,
     QuestionEditRoutingModule,
     ReactiveFormsModule,
-    MaterialExampleModule,
+    MaterialModule,
+    QuestionTypeSwitchPanelModule,
   ],
 })
 export class QuestionEditModule {}

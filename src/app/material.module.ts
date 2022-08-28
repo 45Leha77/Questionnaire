@@ -97,4 +97,4 @@ import { NgModule } from '@angular/core';
     DialogModule,
   ],
 })
-export class MaterialExampleModule {}
+export class MaterialModule {}

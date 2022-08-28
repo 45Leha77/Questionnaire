@@ -10,7 +10,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { NavComponent } from './components/nav/nav.component';
 import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
-import { MaterialExampleModule } from './material.module';
+import { MaterialModule } from './material.module';
 
 @NgModule({
   declarations: [AppComponent, NavComponent],
@@ -20,7 +20,7 @@ import { MaterialExampleModule } from './material.module';
     BrowserAnimationsModule,
     HttpClientModule,
     MatNativeDateModule,
-    MaterialExampleModule,
+    MaterialModule,
   ],
   providers: [
     {
