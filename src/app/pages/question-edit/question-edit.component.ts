@@ -25,7 +25,7 @@ export class QuestionEditComponent implements OnInit {
   public questionType: QuestionsTypes | undefined = undefined;
   public card!: QuestionCard;
   public form: FormGroup = this.fb.group({
-    question: 'Input your question',
+    question: '',
     singles: this.fb.array([]),
     multiples: this.fb.array([]),
     open: this.fb.array([]),

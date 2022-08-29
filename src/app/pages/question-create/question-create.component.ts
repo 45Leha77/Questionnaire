@@ -27,7 +27,7 @@ export class QuestionCreateComponent {
   public card: QuestionCard = {
     id: 0,
     type: undefined,
-    question: 'Input your question',
+    question: '',
     single: [],
     multiple: [],
     open: false,
@@ -36,7 +36,7 @@ export class QuestionCreateComponent {
     answerDate: undefined,
   };
   public form: FormGroup = this.fb.group({
-    question: 'Input your question',
+    question: '',
     singles: this.fb.array([]),
     multiples: this.fb.array([]),
     open: this.fb.array([]),
@@ -109,7 +109,7 @@ export class QuestionCreateComponent {
   private addSingleAnswer(): void {
     this.singles.push(
       this.fb.group({
-        text: 'add answer',
+        text: '',
         radio: { value: '', disabled: true },
       })
     );
@@ -118,14 +118,14 @@ export class QuestionCreateComponent {
   private addMultipleAnswer(): void {
     this.multiples.push(
       this.fb.group({
-        text: 'add answer',
+        text: '',
         input: { value: '', disabled: true },
       })
     );
   }
 
   private addOpenAnswer(): void {
-    this.open.push(this.fb.control('open'));
+    this.open.push(this.fb.control(''));
   }
 
   private addAnswersToCard(): void {

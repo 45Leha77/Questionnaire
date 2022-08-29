@@ -11,9 +11,9 @@ import { LocalStorageService } from 'src/app/core/services/localStorage.service'
 })
 export class QuestionListComponent {
   private cards: QuestionCard[] = this.localStorage.getCards();
-  public unanswered: QuestionCard[] = this.cards.filter((el) => !el.answered);
+  public unanswered: QuestionCard[] = this.cards?.filter((el) => !el.answered);
   public answered: QuestionCard[] = this.cards
-    .filter((card: QuestionCard) => card.answered)
+    ?.filter((card: QuestionCard) => card.answered)
     .sort(
       (card: QuestionCard, followingCard: QuestionCard) =>
         (card.answerDate as number) - (followingCard.answerDate as number)

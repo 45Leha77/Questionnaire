@@ -11,7 +11,11 @@
       <form [formGroup]="form">
         <mat-form-field appearance="fill">
           <mat-label>Input your question</mat-label>
-          <input matInput formControlName="question" />
+          <input
+            matInput
+            formControlName="question"
+            [placeholder]="card.question"
+          />
         </mat-form-field>
         <div formArrayName="singles">
           <div *ngFor="let single of singles.controls; let i = index">

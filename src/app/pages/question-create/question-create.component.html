@@ -16,11 +16,11 @@
           <div *ngFor="let single of singles.controls; let i = index">
             <div [formGroupName]="i">
               <mat-radio-group
-                name="radio {{ i }}"
+                name="radio {{ card.id }}"
                 aria-label="Select an option"
                 formControlName="radio"
               >
-                <mat-radio-button name="radio {{ i }}">
+                <mat-radio-button name="radio {{ card.id }}">
                   <mat-form-field appearance="fill">
                     <mat-label>Input your question</mat-label>
                     <input matInput formControlName="text" />

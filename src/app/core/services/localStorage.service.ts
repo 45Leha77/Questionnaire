@@ -9,7 +9,7 @@ export class LocalStorageService {
 
   public getId(): number {
     const idString: string | null = localStorage.getItem('id');
-    return idString ? +idString : 0;
+    return idString ? +idString : 1;
   }
 
   public setNewId(): void {
@@ -18,13 +18,15 @@ export class LocalStorageService {
   }
 
   public addCard(card: QuestionCard): void {
-    const cards: QuestionCard[] = this.getCards();
+    const cards: QuestionCard[] | [] = this.getCards();
     const extendedCards: QuestionCard[] = [...cards, card];
     this.setToCards(extendedCards);
   }
 
-  public getCards(): QuestionCard[] {
-    return JSON.parse(localStorage.getItem(this._cardsKey) as string);
+  public getCards(): QuestionCard[] | [] {
+    return localStorage.getItem(this._cardsKey)
+      ? JSON.parse(localStorage.getItem(this._cardsKey)!)
+      : [];
   }
 
   public deleteCard(id: number): void {
