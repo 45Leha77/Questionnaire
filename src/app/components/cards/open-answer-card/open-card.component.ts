@@ -7,8 +7,8 @@ import {
   Output,
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CardValidator, QuestionCard } from 'src/app/models/interfaces';
-import { UnsubscribeService } from 'src/app/services/unsubscribe.service';
+import { CardValidator, QuestionCard } from 'src/app/core/models/interfaces';
+import { UnsubscribeService } from 'src/app/core/services/unsubscribe.service';
 import { takeUntil, tap } from 'rxjs';
 import { Required } from 'src/app/shared/decorators/required.decorator';
 

@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { QuestionCreateComponent } from './question-create.component';
 import { MaterialModule } from 'src/app/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { QuestionCreateComponent } from './question-create.component';
 import { QuestionCreateRoutingModule } from './question-create-routing.module';
-import { QuestionTypeSwitchPanelModule } from 'src/app/components/question-type-switch-panel/question-type-switch-panel.module';
+import { QuestionTypeSwitchPanelComponent } from 'src/app/components/question-type-switch-panel/question-type-switch-panel.component';
 
 @NgModule({
   declarations: [QuestionCreateComponent],
@@ -14,7 +15,7 @@ import { QuestionTypeSwitchPanelModule } from 'src/app/components/question-type-
     QuestionCreateRoutingModule,
     ReactiveFormsModule,
     MaterialModule,
-    QuestionTypeSwitchPanelModule
+    QuestionTypeSwitchPanelComponent,
   ],
 })
 export class QuestionCreateModule {}

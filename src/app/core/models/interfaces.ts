@@ -1,3 +1,5 @@
+import { FormControl } from '@angular/forms';
+
 export type QuestionsTypes = 'single' | 'multiple' | 'open';
 
 export interface Answer {
@@ -24,7 +26,7 @@ export interface CardValidator {
   id: number;
 }
 
-export interface AnswerFormValue {
+export interface AnswerCheckboxFormValue {
   text: string;
   inp: boolean;
 }
@@ -32,4 +34,14 @@ export interface AnswerFormValue {
 export interface AnswerRadioFormValue {
   text: string;
   radio: boolean;
+}
+
+export interface MultipleQuestionFormArray {
+  text: FormControl<string | null>;
+  input: FormControl<string | null>;
+}
+
+export interface SingleQuestionFormArray {
+  text: FormControl<string | null>;
+  radio: FormControl<string | null>;
 }

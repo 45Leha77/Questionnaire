@@ -10,7 +10,7 @@
     </mat-radio-button>
   </mat-radio-group>
   <button
-    [disabled]="questionType === cardType.open"
+    [disabled]="!questionType || questionType === cardType.open"
     mat-raised-button
     color="primary"
     (click)="onAddAnswer()"

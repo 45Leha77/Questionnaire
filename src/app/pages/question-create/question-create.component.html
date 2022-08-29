@@ -12,7 +12,6 @@
           <mat-label>Input your question</mat-label>
           <input matInput formControlName="question" />
         </mat-form-field>
-
         <div formArrayName="singles">
           <div *ngFor="let single of singles.controls; let i = index">
             <div [formGroupName]="i">
@@ -21,7 +20,7 @@
                 aria-label="Select an option"
                 formControlName="radio"
               >
-                <mat-radio-button name="radio {{ card.id }}" [value]="true">
+                <mat-radio-button name="radio {{ card.id }}">
                   <mat-form-field appearance="fill">
                     <mat-label>Input your question</mat-label>
                     <input matInput formControlName="text" />
@@ -31,7 +30,6 @@
             </div>
           </div>
         </div>
-
         <div formArrayName="multiples">
           <ul>
             <li *ngFor="let multiple of multiples.controls; let j = index">
@@ -46,7 +44,6 @@
             </li>
           </ul>
         </div>
-
         <div formArrayName="open">
           <div *ngFor="let op of open.controls; let ind = index">
             <mat-form-field appearance="fill">
@@ -61,7 +58,12 @@
         </div>
       </form>
       <mat-card-actions align="end">
-        <button mat-raised-button color="primary" (click)="onSubmit()">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onSubmit()"
+          [disabled]="isDisabledSubmitButton"
+        >
           Submit
         </button>
         <button mat-raised-button color="warn" (click)="clearAnswers()">

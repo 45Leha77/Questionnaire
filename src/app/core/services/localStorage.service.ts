@@ -9,7 +9,7 @@ export class LocalStorageService {
 
   public getId(): number {
     const idString: string | null = localStorage.getItem('id');
-    return idString ? +idString : 0;
+    return idString ? +idString : 1;
   }
 
   public setNewId(): void {
@@ -17,17 +17,19 @@ export class LocalStorageService {
     localStorage.setItem('id', JSON.stringify(updatedId));
   }
 
-  public addCard(card: QuestionCard) {
-    const cards: QuestionCard[] = this.getCards();
-    const extendedCards = [...cards, card];
+  public addCard(card: QuestionCard): void {
+    const cards: QuestionCard[] | [] = this.getCards();
+    const extendedCards: QuestionCard[] = [...cards, card];
     this.setToCards(extendedCards);
   }
 
-  public getCards(): QuestionCard[] {
-    return JSON.parse(localStorage.getItem(this._cardsKey) as string);
+  public getCards(): QuestionCard[] | [] {
+    return localStorage.getItem(this._cardsKey)
+      ? JSON.parse(localStorage.getItem(this._cardsKey)!)
+      : [];
   }
 
-  public deleteCard(id: number) {
+  public deleteCard(id: number): void {
     const cards: QuestionCard[] = this.getCards();
     const updatedCards: QuestionCard[] = cards.filter((card) => card.id !== id);
     this.setToCards(updatedCards);
@@ -38,11 +40,13 @@ export class LocalStorageService {
     return cards.find((card: QuestionCard) => card.id === id)!;
   }
 
-  public saveEdit(card: QuestionCard) {
+  public saveEdit(card: QuestionCard): void {
     const cards: QuestionCard[] = this.getCards();
-    const updatedCards = cards.map((storeCard: QuestionCard) => {
-      return storeCard.id === card.id ? card : storeCard;
-    });
+    const updatedCards: QuestionCard[] = cards.map(
+      (storeCard: QuestionCard) => {
+        return storeCard.id === card.id ? card : storeCard;
+      }
+    );
     this.setToCards(updatedCards);
   }
 

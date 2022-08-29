@@ -1,12 +1,16 @@
+@import "src/assets/style/variables";
+@import "src/assets/style/mixins";
+
 .question-type-switch-panel {
   display: flex;
   align-items: center;
   gap: 50px;
   margin: 20px 0;
   padding: 10px 20px;
-  background-color: whitesmoke;
+  background-color: $mainWhiteColor;
   &__radio-buttons {
     display: flex;
     gap: 10px;
+    @include switchPanelFontStyles;
   }
 }

@@ -2,15 +2,17 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { filter, map, takeUntil, tap } from 'rxjs';
-import { CardType } from 'src/app/enums/card-type';
+import { CardType } from 'src/app/core/enums/card-type';
 
 import {
   QuestionCard,
   Answer,
   QuestionsTypes,
-} from 'src/app/models/interfaces';
-import { LocalStorageService } from 'src/app/services/localStorage.service';
-import { UnsubscribeService } from 'src/app/services/unsubscribe.service';
+  AnswerCheckboxFormValue,
+  AnswerRadioFormValue,
+} from 'src/app/core/models/interfaces';
+import { LocalStorageService } from 'src/app/core/services/localStorage.service';
+import { UnsubscribeService } from 'src/app/core/services/unsubscribe.service';
 
 @Component({
   selector: 'app-question-edit',
@@ -23,7 +25,7 @@ export class QuestionEditComponent implements OnInit {
   public questionType: QuestionsTypes | undefined = undefined;
   public card!: QuestionCard;
   public form: FormGroup = this.fb.group({
-    question: 'Input your question',
+    question: '',
     singles: this.fb.array([]),
     multiples: this.fb.array([]),
     open: this.fb.array([]),
@@ -53,15 +55,15 @@ export class QuestionEditComponent implements OnInit {
       .subscribe();
   }
 
-  get singles(): FormArray<any> {
+  get singles(): FormArray {
     return this.form.get('singles') as FormArray;
   }
 
-  get multiples(): FormArray<any> {
+  get multiples(): FormArray {
     return this.form.get('multiples') as FormArray;
   }
 
-  get open(): FormArray<any> {
+  get open(): FormArray {
     return this.form.get('open') as FormArray;
   }
 
@@ -77,15 +79,15 @@ export class QuestionEditComponent implements OnInit {
   }
 
   public addAnswer(): void {
-    if (this.questionType == this.cardType.single) {
+    if (this.questionType === this.cardType.single) {
       this.addSingleAnswer();
     }
 
-    if (this.questionType == this.cardType.multiple) {
+    if (this.questionType === this.cardType.multiple) {
       this.addMultipleAnswer();
     }
 
-    if (this.questionType == this.cardType.open) {
+    if (this.questionType === this.cardType.open) {
       this.card = {
         ...this.card,
         open: true,
@@ -147,19 +149,18 @@ export class QuestionEditComponent implements OnInit {
 
   private addAnswersToCard(): void {
     if (this.card.type === this.cardType.single) {
-      let single: Answer[] = [];
-      this.form.value.singles.forEach((singleData: any) => {
-        single.push({ value: singleData.text });
-      });
-      this.card.single = single;
+      this.card.single = this.form.value.singles.map(
+        (singleData: { text: AnswerRadioFormValue }) => ({
+          value: singleData.text,
+        })
+      );
     }
-
     if (this.card.type == this.cardType.multiple) {
-      let multiple: Answer[] = [];
-      this.form.value.multiples.forEach((multipleData: any) => {
-        multiple.push({ value: multipleData.text });
-      });
-      this.card.multiple = multiple;
+      this.card.multiple = this.form.value.multiples.map(
+        (multipleData: { text: AnswerCheckboxFormValue }) => ({
+          value: multipleData.text,
+        })
+      );
     }
   }
 
