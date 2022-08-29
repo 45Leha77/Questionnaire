@@ -1,3 +1,5 @@
+@import "./variables";
+
 @mixin cardHover {
   transition: transform 0.3s ease 0s;
   cursor: pointer;
@@ -6,4 +8,30 @@
       transform: scale(1.01);
     }
   }
+}
+
+@mixin cardStyles {
+  @include cardHover;
+  min-height: 250px;
+}
+
+@mixin sectionTitleStyles {
+  font-size: 40px;
+  font-weight: bold;
+  color: $mainWhiteColor;
+  text-align: center;
+  margin-bottom: 0;
+}
+
+@mixin navToggleButtonStyles {
+  font-size: 25px;
+  padding: 10px;
+  min-width: 115px;
+  color: $mainBlackColor;
+}
+
+@mixin switchPanelFontStyles {
+  font-size: 20px;
+  font-weight: 600;
+  color: $mainBlackColor;
 }

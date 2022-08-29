@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CardType } from 'src/app/enums/card-type';
+import { CardType } from 'src/app/core/enums/card-type';
 
-import { QuestionCard } from 'src/app/models/interfaces';
-import { LocalStorageService } from 'src/app/services/localStorage.service';
+import { QuestionCard } from 'src/app/core/models/interfaces';
+import { LocalStorageService } from 'src/app/core/services/localStorage.service';
 
 @Component({
   selector: 'app-question-manage',

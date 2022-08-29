@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { CardType } from 'src/app/enums/card-type';
-import { QuestionCard, CardValidator } from 'src/app/models/interfaces';
-import { LocalStorageService } from 'src/app/services/localStorage.service';
+import { CardType } from 'src/app/core/enums/card-type';
+import { QuestionCard, CardValidator } from 'src/app/core/models/interfaces';
+import { LocalStorageService } from 'src/app/core/services/localStorage.service';
 
 @Component({
   selector: 'app-question-list',
@@ -14,7 +14,10 @@ export class QuestionListComponent {
   public unanswered: QuestionCard[] = this.cards.filter((el) => !el.answered);
   public answered: QuestionCard[] = this.cards
     .filter((card: QuestionCard) => card.answered)
-    .sort((a, b) => (a.answerDate as number) - (b.answerDate as number));
+    .sort(
+      (card: QuestionCard, followingCard: QuestionCard) =>
+        (card.answerDate as number) - (followingCard.answerDate as number)
+    );
   public cardType = CardType;
 
   private enabled: Set<Number> = new Set<number>();

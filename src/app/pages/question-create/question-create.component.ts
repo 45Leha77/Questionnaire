@@ -1,15 +1,18 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { CardType } from 'src/app/enums/card-type';
+import { CardType } from 'src/app/core/enums/card-type';
 
 import {
+  AnswerCheckboxFormValue,
+  AnswerRadioFormValue,
+  MultipleQuestionFormArray,
   QuestionCard,
-  Answer,
   QuestionsTypes,
-} from 'src/app/models/interfaces';
-import { LocalStorageService } from 'src/app/services/localStorage.service';
-import { UnsubscribeService } from 'src/app/services/unsubscribe.service';
+  SingleQuestionFormArray,
+} from 'src/app/core/models/interfaces';
+import { LocalStorageService } from 'src/app/core/services/localStorage.service';
+import { UnsubscribeService } from 'src/app/core/services/unsubscribe.service';
 
 @Component({
   selector: 'app-question-create',
@@ -19,6 +22,7 @@ import { UnsubscribeService } from 'src/app/services/unsubscribe.service';
   providers: [UnsubscribeService],
 })
 export class QuestionCreateComponent {
+  public isDisabledSubmitButton: boolean = this.validateCard();
   public questionType: QuestionsTypes | undefined = undefined;
   public card: QuestionCard = {
     id: 0,
@@ -44,18 +48,6 @@ export class QuestionCreateComponent {
     private fb: FormBuilder
   ) {}
 
-  get singles(): FormArray<any> {
-    return this.form.get('singles') as FormArray;
-  }
-
-  get multiples(): FormArray<any> {
-    return this.form.get('multiples') as FormArray;
-  }
-
-  get open(): FormArray<any> {
-    return this.form.get('open') as FormArray;
-  }
-
   public onSubmit(): void {
     this.card = {
       ...this.card,
@@ -74,6 +66,7 @@ export class QuestionCreateComponent {
     this.clearAnswers();
     this.questionType = type;
     this.addAnswer();
+    this.isDisabledSubmitButton = this.validateCard();
   }
 
   public addAnswer(): void {
@@ -92,12 +85,25 @@ export class QuestionCreateComponent {
       };
       this.addOpenAnswer();
     }
+    this.isDisabledSubmitButton = this.validateCard();
   }
 
   public clearAnswers(): void {
     this.singles.clear();
     this.multiples.clear();
     this.open.clear();
+  }
+
+  get singles(): FormArray<FormGroup<SingleQuestionFormArray>> {
+    return this.form.get('singles') as FormArray;
+  }
+
+  get multiples(): FormArray<FormGroup<MultipleQuestionFormArray>> {
+    return this.form.get('multiples') as FormArray;
+  }
+
+  get open(): FormArray<FormControl<string | null>> {
+    return this.form.get('open') as FormArray;
   }
 
   private addSingleAnswer(): void {
@@ -124,19 +130,31 @@ export class QuestionCreateComponent {
 
   private addAnswersToCard(): void {
     if (this.card.type === this.cardType.single) {
-      let single: Answer[] = [];
-      this.form.value.singles.forEach((singleData: any) => {
-        single.push({ value: singleData.text });
-      });
-      this.card.single = single;
+      this.card.single = this.form.value.singles.map(
+        (singleData: { text: AnswerRadioFormValue }) => ({
+          value: singleData.text,
+        })
+      );
     }
+    if (this.card.type == this.cardType.multiple) {
+      this.card.multiple = this.form.value.multiples.map(
+        (multipleData: { text: AnswerCheckboxFormValue }) => ({
+          value: multipleData.text,
+        })
+      );
+    }
+  }
 
-    if (this.card.type === this.cardType.multiple) {
-      let multiple: Answer[] = [];
-      this.form.value.multiples.forEach((multipleData: any) => {
-        multiple.push({ value: multipleData.text });
-      });
-      this.card.multiple = multiple;
+  private validateCard(): boolean {
+    if (!this.questionType) {
+      return true;
     }
+    if (this.questionType === this.cardType.single) {
+      return this.singles.length < 2;
+    }
+    if (this.questionType === this.cardType.multiple) {
+      return this.multiples.length < 2;
+    }
+    return false;
   }
 }

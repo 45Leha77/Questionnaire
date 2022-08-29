@@ -2,8 +2,8 @@
   <app-question-type-switch-panel
     (radioButtonChange)="onChange($event)"
     (addAnswer)="addAnswer()"
+    [questionType]="questionType"
   ></app-question-type-switch-panel>
-<!-- / -->
   <div class="page-question-edit__cards">
     <mat-card>
       <mat-card-title>Question card</mat-card-title>
@@ -21,7 +21,7 @@
                 aria-label="Select an option"
                 formControlName="radio"
               >
-                <mat-radio-button name="radio {{ card.id }}" [value]="true">
+                <mat-radio-button name="radio {{ card.id }}">
                   <mat-form-field appearance="fill">
                     <mat-label>Input your question</mat-label>
                     <input matInput formControlName="text" />
@@ -66,5 +66,4 @@
       </mat-card-actions>
     </mat-card>
   </div>
-  <!-- / -->
 </section>

@@ -1,10 +1,10 @@
+@import "src/assets/style/mixins";
+
 mat-button-toggle-group {
-  font-size: 25px;
-  border: none;
   display: inline-flex;
   gap: 5px;
+  border: none;
   mat-button-toggle {
-    padding: 10px;
-    min-width: 115px;
+    @include navToggleButtonStyles;
   }
 }

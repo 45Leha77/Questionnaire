@@ -23,8 +23,15 @@
         [mode]="'manage'"
       ></app-open-card>
       <mat-card-actions align="end">
-        <button mat-button (click)="onDelete(card.id)">Delete</button>
-        <button mat-button routerLink="../edit" [queryParams]="{ id: card.id }">
+        <button mat-raised-button color="warn" (click)="onDelete(card.id)">
+          Delete
+        </button>
+        <button
+          mat-raised-button
+          color="accent"
+          routerLink="../edit"
+          [queryParams]="{ id: card.id }"
+        >
           Edit
         </button>
       </mat-card-actions>

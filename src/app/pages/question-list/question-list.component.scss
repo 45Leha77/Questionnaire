@@ -13,15 +13,10 @@
   gap: 20px;
   width: 50%;
   &__title {
-    font-size: 40px;
-    font-weight: bold;
-    color: whitesmoke;
-    text-align: center;
-    margin-bottom: 0;
+    @include sectionTitleStyles;
   }
 }
 
 mat-card {
-  @include cardHover;
-  min-height: 250px;
+  @include cardStyles;
 }

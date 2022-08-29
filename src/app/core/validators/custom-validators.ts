@@ -1,5 +1,8 @@
 import { AbstractControl, ValidationErrors } from '@angular/forms';
-import { AnswerFormValue, AnswerRadioFormValue } from '../../models/interfaces';
+import {
+  AnswerCheckboxFormValue,
+  AnswerRadioFormValue,
+} from '../models/interfaces';
 
 export function validateCheckBox(
   multipleArray: AbstractControl
@@ -7,12 +10,9 @@ export function validateCheckBox(
   if (!multipleArray.value.length) {
     return null;
   }
-  const isAnyCheckboxChecked = multipleArray.value.filter(
-    (control: AnswerFormValue) => !!control.inp
-  ).length
-    ? true
-    : false;
-
+  const isAnyCheckboxChecked: number = multipleArray.value.filter(
+    (control: AnswerCheckboxFormValue) => control.inp
+  ).length;
   return isAnyCheckboxChecked ? null : { multipleCheckboxRequireOne: true };
 }
 
@@ -22,10 +22,8 @@ export function validateRadioButton(
   if (!singleArray.value.length) {
     return null;
   }
-  const isAnyCheckboxChecked = singleArray.value.filter(
-    (control: AnswerRadioFormValue) => !!control.radio
-  ).length
-    ? true
-    : false;
-  return isAnyCheckboxChecked ? null : { multipleCheckboxRequireOne: true };
+  const isAnyRadioChecked: boolean = !!singleArray.value.filter(
+    (control: AnswerRadioFormValue) => control.radio
+  ).length;
+  return isAnyRadioChecked ? null : { multipleCheckboxRequireOne: true };
 }

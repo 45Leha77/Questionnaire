@@ -9,14 +9,14 @@ import {
 import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import { filter, takeUntil, tap } from 'rxjs';
 
-import { validateCheckBox } from 'src/app/shared/validators/custom-validators';
+import { validateCheckBox } from 'src/app/core/validators/custom-validators';
 import {
   QuestionCard,
   CardValidator,
   Answer,
-  AnswerFormValue,
-} from 'src/app/models/interfaces';
-import { UnsubscribeService } from 'src/app/services/unsubscribe.service';
+  AnswerCheckboxFormValue,
+} from 'src/app/core/models/interfaces';
+import { UnsubscribeService } from 'src/app/core/services/unsubscribe.service';
 import { Required } from 'src/app/shared/decorators/required.decorator';
 
 @Component({
@@ -29,7 +29,8 @@ import { Required } from 'src/app/shared/decorators/required.decorator';
 export class MultipleCardComponent implements OnInit {
   @Input() @Required public card!: QuestionCard;
   @Input() public mode: string = 'list';
-  @Output() public change = new EventEmitter<CardValidator>();
+  @Output() public change: EventEmitter<CardValidator> =
+    new EventEmitter<CardValidator>();
 
   public form: FormGroup = this.fb.group({
     answers: this.fb.array([], validateCheckBox),
@@ -55,13 +56,12 @@ export class MultipleCardComponent implements OnInit {
       .pipe(
         filter(() => !!this.card),
         tap((value) => {
-          const list: number[] = value.answers
-            .filter((el: AnswerFormValue) => el.inp)
-            .map((el: AnswerFormValue, index: number): number => index);
-          if (list.length) {
-            this.card.multipleValue = list;
-          }
-
+          const list: number[] = value.answers.map(
+            (el: AnswerCheckboxFormValue, index: number): number => {
+              return el.inp ? index : -1;
+            }
+          );
+          list.length ? (this.card.multipleValue = list) : null;
           this.change.emit({ isValid: this.form.valid, id: this.card.id });
         }),
         takeUntil(this.unsubscribe.destroy$)
