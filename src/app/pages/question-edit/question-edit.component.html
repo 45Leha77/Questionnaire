@@ -1,11 +1,11 @@
 <section class="page-question-edit">
   <app-question-type-switch-panel
     (radioButtonChange)="onChange($event)"
-    (addAnswer)="addAnswer()"
+    (addAnswer)="addAnswer(questionType!)"
     [questionType]="questionType"
   ></app-question-type-switch-panel>
   <div class="page-question-edit__cards">
-    <mat-card>
+    <mat-card *ngIf="card; else emptyCard">
       <mat-card-title>Question card</mat-card-title>
       <mat-card-subtitle>Date</mat-card-subtitle>
       <form [formGroup]="form">
@@ -27,7 +27,7 @@
               >
                 <mat-radio-button name="radio {{ card.id }}">
                   <mat-form-field appearance="fill">
-                    <mat-label>Input your question</mat-label>
+                    <mat-label>Input your answer</mat-label>
                     <input matInput formControlName="text" />
                   </mat-form-field>
                 </mat-radio-button>
@@ -41,7 +41,7 @@
               <div [formGroupName]="j">
                 <mat-checkbox formControlName="input">
                   <mat-form-field appearance="fill">
-                    <mat-label>Input your question</mat-label>
+                    <mat-label>Input your answer</mat-label>
                     <input matInput formControlName="text" />
                   </mat-form-field>
                 </mat-checkbox>
@@ -63,11 +63,21 @@
         </div>
       </form>
       <mat-card-actions align="end">
-        <button mat-raised-button color="primary" (click)="onEdit()">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onEdit()"
+          [disabled]="!form.valid"
+        >
           Submit
         </button>
         <button mat-raised-button color="warn" (click)="onUndo()">Undo</button>
       </mat-card-actions>
     </mat-card>
+    <ng-template #emptyCard>
+      <div class="page-question-edit__empty-card">
+        Oops. There is no card with such id!
+      </div>
+    </ng-template>
   </div>
 </section>

@@ -72,7 +72,7 @@ export class MultipleCardComponent implements OnInit {
   private addAnswer(answer: Answer, index: number): void {
     let inp: object | [] = { value: '', disabled: true };
     if (this.mode === 'list') {
-      if (this.card.answered) {
+      if (this.card.isAnswered) {
         inp = {
           value: this.card.multipleValue?.indexOf(index) != -1,
           disabled: true,

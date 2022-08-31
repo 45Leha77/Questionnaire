@@ -14,10 +14,10 @@ export interface QuestionCard {
   singleValue?: number;
   multiple: Answer[];
   multipleValue?: number[];
-  open: boolean;
+  isOpen: boolean;
   openAnswerValue?: string;
   date: number;
-  answered: boolean;
+  isAnswered: boolean;
   answerDate?: number;
 }
 
