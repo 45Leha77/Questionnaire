@@ -1,4 +1,5 @@
 @import "src/assets/style/variables";
+@import "src/assets/style/mixins";
 
 .page-question-edit {
   &__cards {
@@ -7,5 +8,9 @@
   }
   input {
     color: $mainBlackColor;
+  }
+
+  &__empty-card {
+    @include emptyCardStyles;
   }
 }

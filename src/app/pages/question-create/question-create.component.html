@@ -1,10 +1,10 @@
 <section class="page-question-create">
   <app-question-type-switch-panel
     (radioButtonChange)="onChange($event)"
-    (addAnswer)="addAnswer()"
+    (addAnswer)="addAnswer(questionType!)"
   ></app-question-type-switch-panel>
   <div class="page-question-create__cards">
-    <mat-card>
+    <mat-card *ngIf="questionType; else emptyCard">
       <mat-card-title>Question card</mat-card-title>
       <mat-card-subtitle>Date</mat-card-subtitle>
       <form [formGroup]="form">
@@ -22,7 +22,7 @@
               >
                 <mat-radio-button name="radio {{ card.id }}">
                   <mat-form-field appearance="fill">
-                    <mat-label>Input your question</mat-label>
+                    <mat-label>Input your answer</mat-label>
                     <input matInput formControlName="text" />
                   </mat-form-field>
                 </mat-radio-button>
@@ -36,7 +36,7 @@
               <div [formGroupName]="j">
                 <mat-checkbox formControlName="input">
                   <mat-form-field appearance="fill">
-                    <mat-label>Input your question</mat-label>
+                    <mat-label>Input your answer</mat-label>
                     <input matInput formControlName="text" />
                   </mat-form-field>
                 </mat-checkbox>
@@ -62,7 +62,7 @@
           mat-raised-button
           color="primary"
           (click)="onSubmit()"
-          [disabled]="isDisabledSubmitButton"
+          [disabled]="!isValidAnswers || !form.valid"
         >
           Submit
         </button>
@@ -71,5 +71,10 @@
         </button>
       </mat-card-actions>
     </mat-card>
+    <ng-template #emptyCard>
+      <div class="page-question-create__empty-card">
+        Please select type of question
+      </div>
+    </ng-template>
   </div>
 </section>

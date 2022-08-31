@@ -56,7 +56,7 @@ export class OpenCardComponent implements OnInit {
 
   private addAnswer(): void {
     if (this.mode === 'list') {
-      return this.card.answered
+      return this.card.isAnswered
         ? this.answers.push(
             this.fb.control({
               value: this.card.openAnswerValue,

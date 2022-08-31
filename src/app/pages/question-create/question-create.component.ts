@@ -1,17 +1,21 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { CardType } from 'src/app/core/enums/card-type';
-
 import {
-  AnswerCheckboxFormValue,
-  AnswerRadioFormValue,
   MultipleQuestionFormArray,
   QuestionCard,
   QuestionsTypes,
   SingleQuestionFormArray,
 } from 'src/app/core/models/interfaces';
 import { LocalStorageService } from 'src/app/core/services/localStorage.service';
+import { CardFormatterService } from 'src/app/core/services/cardFormatter.service';
 import { UnsubscribeService } from 'src/app/core/services/unsubscribe.service';
 
 @Component({
@@ -22,30 +26,29 @@ import { UnsubscribeService } from 'src/app/core/services/unsubscribe.service';
   providers: [UnsubscribeService],
 })
 export class QuestionCreateComponent {
-  public isDisabledSubmitButton: boolean = this.validateCard();
   public questionType: QuestionsTypes | undefined = undefined;
+  public isValidAnswers: boolean = this.isEnoughAnswers(this.questionType);
   public card: QuestionCard = {
     id: 0,
-    type: undefined,
     question: '',
     single: [],
     multiple: [],
-    open: false,
+    isOpen: false,
     date: 0,
-    answered: false,
-    answerDate: undefined,
+    isAnswered: false,
   };
   public form: FormGroup = this.fb.group({
-    question: '',
+    question: ['', Validators.required],
     singles: this.fb.array([]),
     multiples: this.fb.array([]),
     open: this.fb.array([]),
   });
-  private cardType = CardType;
+  private cardType: typeof CardType = CardType;
   constructor(
-    private localStorage: LocalStorageService,
-    private router: Router,
-    private fb: FormBuilder
+    private readonly localStorage: LocalStorageService,
+    private readonly router: Router,
+    private readonly fb: FormBuilder,
+    private readonly cardFormatter: CardFormatterService
   ) {}
 
   public onSubmit(): void {
@@ -54,9 +57,9 @@ export class QuestionCreateComponent {
       id: this.localStorage.getId(),
       date: Date.now(),
       type: this.questionType,
-      question: this.form.value.question,
+      isOpen: this.questionType === this.cardType.open,
     };
-    this.addAnswersToCard();
+    this.card = this.cardFormatter.updateCardByForm(this.card, this.form);
     this.localStorage.addCard(this.card);
     this.localStorage.setNewId();
     this.router.navigateByUrl('/manage');
@@ -65,27 +68,23 @@ export class QuestionCreateComponent {
   public onChange(type: QuestionsTypes): void {
     this.clearAnswers();
     this.questionType = type;
-    this.addAnswer();
-    this.isDisabledSubmitButton = this.validateCard();
+    this.addAnswer(type);
+    this.isValidAnswers = this.isEnoughAnswers(type);
   }
 
-  public addAnswer(): void {
-    if (this.questionType === this.cardType.single) {
+  public addAnswer(type: QuestionsTypes): void {
+    if (type === this.cardType.single) {
       this.addSingleAnswer();
     }
 
-    if (this.questionType === this.cardType.multiple) {
+    if (type === this.cardType.multiple) {
       this.addMultipleAnswer();
     }
 
-    if (this.questionType == this.cardType.open) {
-      this.card = {
-        ...this.card,
-        open: true,
-      };
+    if (type === this.cardType.open) {
       this.addOpenAnswer();
     }
-    this.isDisabledSubmitButton = this.validateCard();
+    this.isValidAnswers = this.isEnoughAnswers(type);
   }
 
   public clearAnswers(): void {
@@ -107,54 +106,36 @@ export class QuestionCreateComponent {
   }
 
   private addSingleAnswer(): void {
-    this.singles.push(
-      this.fb.group({
-        text: '',
-        radio: { value: '', disabled: true },
-      })
-    );
+    const singleAnswerForm: FormGroup = this.fb.group({
+      text: ['', Validators.required],
+      radio: { value: '', disabled: true },
+    });
+    this.singles.push(singleAnswerForm);
   }
 
   private addMultipleAnswer(): void {
-    this.multiples.push(
-      this.fb.group({
-        text: '',
-        input: { value: '', disabled: true },
-      })
-    );
+    const multipleAnswerForm: FormGroup = this.fb.group({
+      text: ['', Validators.required],
+      input: { value: '', disabled: true },
+    });
+    this.multiples.push(multipleAnswerForm);
   }
 
   private addOpenAnswer(): void {
-    this.open.push(this.fb.control(''));
+    this.open.push(this.fb.control({ value: '', disabled: true }));
   }
 
-  private addAnswersToCard(): void {
-    if (this.card.type === this.cardType.single) {
-      this.card.single = this.form.value.singles.map(
-        (singleData: { text: AnswerRadioFormValue }) => ({
-          value: singleData.text,
-        })
-      );
+  private isEnoughAnswers(type: QuestionsTypes | undefined): boolean {
+    const _minAnswersNumber: number = 2;
+    if (!type) {
+      return false;
     }
-    if (this.card.type == this.cardType.multiple) {
-      this.card.multiple = this.form.value.multiples.map(
-        (multipleData: { text: AnswerCheckboxFormValue }) => ({
-          value: multipleData.text,
-        })
-      );
+    if (type === this.cardType.single) {
+      return this.singles.length >= _minAnswersNumber;
     }
-  }
-
-  private validateCard(): boolean {
-    if (!this.questionType) {
-      return true;
+    if (type === this.cardType.multiple) {
+      return this.multiples.length >= _minAnswersNumber;
     }
-    if (this.questionType === this.cardType.single) {
-      return this.singles.length < 2;
-    }
-    if (this.questionType === this.cardType.multiple) {
-      return this.multiples.length < 2;
-    }
-    return false;
+    return true;
   }
 }

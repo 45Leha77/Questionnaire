@@ -35,3 +35,11 @@
   font-weight: 600;
   color: $mainBlackColor;
 }
+
+@mixin emptyCardStyles {
+  text-align: center;
+  width: 100%;
+  height: 300px;
+  font-size: 50px;
+  background-color: $mainWhiteColor;
+}

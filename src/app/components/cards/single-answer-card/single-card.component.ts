@@ -28,7 +28,8 @@ import { Required } from 'src/app/shared/decorators/required.decorator';
 export class SingleCardComponent implements OnInit {
   @Input() @Required public card!: QuestionCard;
   @Input() public mode: string = 'list';
-  @Output() public change = new EventEmitter<CardValidator>();
+  @Output() public change: EventEmitter<CardValidator> =
+    new EventEmitter<CardValidator>();
 
   public form: FormGroup = this.fb.group({
     answers: this.fb.array([], validateRadioButton),
@@ -73,7 +74,7 @@ export class SingleCardComponent implements OnInit {
   private addAnswer(answer: Answer, index: number): void {
     let radio: object | [] = { value: '', disabled: true };
     if (this.mode === 'list') {
-      if (this.card.answered) {
+      if (this.card.isAnswered) {
         const value = this.card.singleValue === index;
         radio = { value: value, disabled: true };
       } else {

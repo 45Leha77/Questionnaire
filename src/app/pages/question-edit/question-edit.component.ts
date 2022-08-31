@@ -1,5 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { filter, map, takeUntil, tap } from 'rxjs';
 import { CardType } from 'src/app/core/enums/card-type';
@@ -8,10 +14,11 @@ import {
   QuestionCard,
   Answer,
   QuestionsTypes,
-  AnswerCheckboxFormValue,
-  AnswerRadioFormValue,
+  SingleQuestionFormArray,
+  MultipleQuestionFormArray,
 } from 'src/app/core/models/interfaces';
 import { LocalStorageService } from 'src/app/core/services/localStorage.service';
+import { CardFormatterService } from 'src/app/core/services/cardFormatter.service';
 import { UnsubscribeService } from 'src/app/core/services/unsubscribe.service';
 
 @Component({
@@ -23,75 +30,76 @@ import { UnsubscribeService } from 'src/app/core/services/unsubscribe.service';
 })
 export class QuestionEditComponent implements OnInit {
   public questionType: QuestionsTypes | undefined = undefined;
-  public card!: QuestionCard;
+  public card: QuestionCard | null = null;
   public form: FormGroup = this.fb.group({
-    question: '',
+    question: ['', Validators.required],
     singles: this.fb.array([]),
     multiples: this.fb.array([]),
     open: this.fb.array([]),
   });
-  private cardType = CardType;
+  private cardType: typeof CardType = CardType;
   constructor(
-    private localStorage: LocalStorageService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private fb: FormBuilder,
-    private unsubscribe: UnsubscribeService
+    private readonly localStorage: LocalStorageService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly fb: FormBuilder,
+    private readonly unsubscribe: UnsubscribeService,
+    private readonly cardFormatter: CardFormatterService
   ) {}
 
   ngOnInit(): void {
-    this.route.queryParamMap;
     this.route.queryParamMap
       .pipe(
         map((param: ParamMap) => param.get('id')),
         filter((id) => !!id),
         tap((id) => {
           this.card = this.localStorage.getCardById(+id!);
-          this.questionType = this.card.type;
-          this.updateForm();
+          if (!!this.card) {
+            this.questionType = this.card.type;
+            this.updateForm();
+          }
         }),
         takeUntil(this.unsubscribe.destroy$)
       )
       .subscribe();
   }
 
-  get singles(): FormArray {
+  get singles(): FormArray<FormGroup<SingleQuestionFormArray>> {
     return this.form.get('singles') as FormArray;
   }
 
-  get multiples(): FormArray {
+  get multiples(): FormArray<FormGroup<MultipleQuestionFormArray>> {
     return this.form.get('multiples') as FormArray;
   }
 
-  get open(): FormArray {
+  get open(): FormArray<FormControl<string | null>> {
     return this.form.get('open') as FormArray;
   }
 
   public onEdit(): void {
+    if (!this.card) {
+      return;
+    }
     this.card = {
       ...this.card,
       type: this.questionType,
-      question: this.form.value.question,
+      isOpen: this.questionType === this.cardType.open,
     };
-    this.addAnswersToCard();
+    this.card = this.cardFormatter.updateCardByForm(this.card, this.form);
     this.localStorage.saveEdit(this.card);
     this.router.navigateByUrl('/manage');
   }
 
-  public addAnswer(): void {
-    if (this.questionType === this.cardType.single) {
+  public addAnswer(type: QuestionsTypes): void {
+    if (type === this.cardType.single) {
       this.addSingleAnswer();
     }
 
-    if (this.questionType === this.cardType.multiple) {
+    if (type === this.cardType.multiple) {
       this.addMultipleAnswer();
     }
 
-    if (this.questionType === this.cardType.open) {
-      this.card = {
-        ...this.card,
-        open: true,
-      };
+    if (type === this.cardType.open) {
       this.addOpenAnswer();
     }
   }
@@ -104,34 +112,34 @@ export class QuestionEditComponent implements OnInit {
   public onChange(type: QuestionsTypes): void {
     this.clearAnswers();
     this.questionType = type;
-    this.card.type === type ? this.updateForm() : this.addAnswer();
+    this.card?.type === type ? this.updateForm() : this.addAnswer(type);
   }
 
   private addSingleAnswer(answer?: Answer): void {
-    this.singles.push(
-      this.fb.group({
-        text: answer ? answer.value : 'input your answer',
-        radio: { value: '', disabled: true },
-      })
-    );
+    const singleAnswerForm: FormGroup = this.fb.group({
+      text: [answer ? answer.value : '', Validators.required],
+      radio: { value: '', disabled: true },
+    });
+    this.singles.push(singleAnswerForm);
   }
 
   private addMultipleAnswer(answer?: Answer): void {
-    this.multiples.push(
-      this.fb.group({
-        text: answer ? answer.value : 'input your answer',
-        input: { value: '', disabled: true },
-      })
-    );
+    const multipleAnswerForm: FormGroup = this.fb.group({
+      text: [answer ? answer.value : '', Validators.required],
+      input: { value: '', disabled: true },
+    });
+    this.multiples.push(multipleAnswerForm);
   }
 
   private addOpenAnswer(): void {
-    this.open.push(this.fb.control('open'));
+    this.open.push(this.fb.control({ value: '', disabled: true }));
   }
 
   private updateForm(): void {
+    if (!this.card) {
+      return;
+    }
     this.form.patchValue({ question: this.card.question });
-
     if (this.card.type === this.cardType.open) {
       this.addOpenAnswer();
     }
@@ -144,23 +152,6 @@ export class QuestionEditComponent implements OnInit {
       this.card.multiple.forEach((multiple: Answer) => {
         this.addMultipleAnswer(multiple);
       });
-    }
-  }
-
-  private addAnswersToCard(): void {
-    if (this.card.type === this.cardType.single) {
-      this.card.single = this.form.value.singles.map(
-        (singleData: { text: AnswerRadioFormValue }) => ({
-          value: singleData.text,
-        })
-      );
-    }
-    if (this.card.type == this.cardType.multiple) {
-      this.card.multiple = this.form.value.multiples.map(
-        (multipleData: { text: AnswerCheckboxFormValue }) => ({
-          value: multipleData.text,
-        })
-      );
     }
   }
 
