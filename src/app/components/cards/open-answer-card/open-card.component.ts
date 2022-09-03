@@ -7,7 +7,10 @@ import {
   Output,
 } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CardValidator, QuestionCard } from 'src/app/core/models/interfaces';
+import {
+  CardValidator,
+  OpenQuestionCard,
+} from 'src/app/core/models/interfaces';
 import { UnsubscribeService } from 'src/app/core/services/unsubscribe.service';
 import { takeUntil, tap } from 'rxjs';
 import { Required } from 'src/app/shared/decorators/required.decorator';
@@ -20,7 +23,7 @@ import { Required } from 'src/app/shared/decorators/required.decorator';
   providers: [UnsubscribeService],
 })
 export class OpenCardComponent implements OnInit {
-  @Input() @Required public card!: QuestionCard;
+  @Input() @Required public card!: OpenQuestionCard;
   @Input() public mode: string = 'list';
   @Output() public change = new EventEmitter<CardValidator>();
 

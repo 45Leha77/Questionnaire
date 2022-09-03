@@ -9,17 +9,17 @@
       <p>{{ card.question }}</p>
       <app-single-card
         *ngIf="card.type === cardType.single"
-        [card]="card"
+        [card]="card | singleQuestion"
         [mode]="'manage'"
       ></app-single-card>
       <app-multiple-card
         *ngIf="card.type === cardType.multiple"
-        [card]="card"
+        [card]="card | multipleQuestion"
         [mode]="'manage'"
       ></app-multiple-card>
       <app-open-card
         *ngIf="card.type === cardType.open"
-        [card]="card"
+        [card]="card | openQuestion"
         [mode]="'manage'"
       ></app-open-card>
       <mat-card-actions align="end">

@@ -1,14 +1,15 @@
 @import "src/assets/style/mixins";
 
-.question-list-page {
-  display: flex;
-  gap: 20px;
-  margin-top: 20px;
-}
-
 .field {
-  width: 50%;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  gap: 20px;
   &__title {
     @include sectionTitleStyles;
   }
+}
+
+mat-card {
+  @include cardStyles;
 }

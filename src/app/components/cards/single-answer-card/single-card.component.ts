@@ -11,9 +11,9 @@ import { takeUntil, tap } from 'rxjs';
 
 import { validateRadioButton } from 'src/app/core/validators/custom-validators';
 import {
-  QuestionCard,
   CardValidator,
   Answer,
+  SingleQuestionCard,
 } from 'src/app/core/models/interfaces';
 import { UnsubscribeService } from 'src/app/core/services/unsubscribe.service';
 import { Required } from 'src/app/shared/decorators/required.decorator';
@@ -26,7 +26,7 @@ import { Required } from 'src/app/shared/decorators/required.decorator';
   providers: [UnsubscribeService],
 })
 export class SingleCardComponent implements OnInit {
-  @Input() @Required public card!: QuestionCard;
+  @Input() @Required public card!: SingleQuestionCard;
   @Input() public mode: string = 'list';
   @Output() public change: EventEmitter<CardValidator> =
     new EventEmitter<CardValidator>();

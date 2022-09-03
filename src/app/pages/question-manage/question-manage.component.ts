@@ -14,7 +14,7 @@ export class QuestionManageComponent {
   public cards: QuestionCard[] = this.localStorage.getCards();
   public cardType = CardType;
 
-  constructor(private localStorage: LocalStorageService) {}
+  constructor(private readonly localStorage: LocalStorageService) {}
 
   public onDelete(id: number): void {
     this.localStorage.deleteCard(id);

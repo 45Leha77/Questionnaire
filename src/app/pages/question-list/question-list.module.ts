@@ -5,9 +5,11 @@ import { MaterialModule } from 'src/app/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CardsModule } from 'src/app/components/cards/cards.module';
 import { QuestionListRoutingModule } from './question-list-routing.module';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { QuestionsBlockComponent } from './questions-block/questions-block.component';
 
 @NgModule({
-  declarations: [QuestionListComponent],
+  declarations: [QuestionListComponent, QuestionsBlockComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -15,6 +17,7 @@ import { QuestionListRoutingModule } from './question-list-routing.module';
     ReactiveFormsModule,
     MaterialModule,
     CardsModule,
+    SharedModule
   ],
 })
 export class QuestionListModule {}
