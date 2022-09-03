@@ -15,6 +15,7 @@ import {
   CardValidator,
   Answer,
   AnswerCheckboxFormValue,
+  MultipleQuestionCard,
 } from 'src/app/core/models/interfaces';
 import { UnsubscribeService } from 'src/app/core/services/unsubscribe.service';
 import { Required } from 'src/app/shared/decorators/required.decorator';
@@ -27,7 +28,7 @@ import { Required } from 'src/app/shared/decorators/required.decorator';
   providers: [UnsubscribeService],
 })
 export class MultipleCardComponent implements OnInit {
-  @Input() @Required public card!: QuestionCard;
+  @Input() @Required public card!: MultipleQuestionCard;
   @Input() public mode: string = 'list';
   @Output() public change: EventEmitter<CardValidator> =
     new EventEmitter<CardValidator>();

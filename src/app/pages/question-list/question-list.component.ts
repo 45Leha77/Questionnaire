@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CardType } from 'src/app/core/enums/card-type';
-import { QuestionCard, CardValidator } from 'src/app/core/models/interfaces';
+import { QuestionCard } from 'src/app/core/models/interfaces';
 import { LocalStorageService } from 'src/app/core/services/localStorage.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { LocalStorageService } from 'src/app/core/services/localStorage.service'
 export class QuestionListComponent {
   private cards: QuestionCard[] = this.localStorage.getCards();
   public unanswered: QuestionCard[] = this.cards?.filter(
-    (el) => !el.isAnswered
+    (el: QuestionCard) => !el.isAnswered
   );
   public answered: QuestionCard[] = this.cards
     ?.filter((card: QuestionCard) => card.isAnswered)
@@ -22,44 +22,39 @@ export class QuestionListComponent {
     );
   public cardType = CardType;
 
-  private enabled: Set<Number> = new Set<number>();
-
-  constructor(private localStorage: LocalStorageService) {}
+  constructor(private readonly localStorage: LocalStorageService) {}
 
   public onSubmit(card: QuestionCard): void {
-    const updatedCard: QuestionCard = {
+    const answeredCard: QuestionCard = this.markCardAsAnswered(card);
+    this.localStorage.saveEdit(answeredCard);
+    this.unanswered = this.unanswered.filter(
+      (el: QuestionCard) => el.id !== card.id
+    );
+    this.answered = [...this.answered, answeredCard];
+  }
+
+  public onUndo(card: QuestionCard): void {
+    const unansweredCard: QuestionCard = this.markCardAsUnanswered(card);
+    this.localStorage.saveEdit(unansweredCard);
+    this.answered = this.answered.filter(
+      (el: QuestionCard) => el.id !== card.id
+    );
+    this.unanswered = [...this.unanswered, unansweredCard];
+  }
+
+  private markCardAsAnswered(card: QuestionCard): QuestionCard {
+    return {
       ...card,
       isAnswered: true,
       answerDate: Date.now(),
     };
-    this.localStorage.saveEdit(updatedCard);
-    this.unanswered = this.unanswered.filter((el) => el.id !== card.id);
-    this.answered = [...this.answered, updatedCard];
-
-    this.enabled.delete(card.id);
   }
 
-  public onUndo(card: QuestionCard): void {
-    const updatedCard: QuestionCard = {
+  private markCardAsUnanswered(card: QuestionCard): QuestionCard {
+    return {
       ...card,
       isAnswered: false,
+      answerDate: 0,
     };
-    this.localStorage.saveEdit(updatedCard);
-    this.answered = this.answered.filter((el) => el.id !== card.id);
-    this.unanswered = [...this.unanswered, updatedCard];
-
-    if (card.type == this.cardType.open) {
-      this.enabled.add(card.id);
-    }
-  }
-
-  public isSubmitDisabled(id: number): boolean {
-    return !this.enabled.has(id);
-  }
-
-  public onChange(changedCardForm: CardValidator): void {
-    changedCardForm.isValid
-      ? this.enabled.add(changedCardForm.id)
-      : this.enabled.delete(changedCardForm.id);
   }
 }

@@ -8,7 +8,6 @@ import {
 } from '@angular/core';
 import { CardType } from 'src/app/core/enums/card-type';
 import { MaterialModule } from 'src/app/material.module';
-import { QuestionsTypes } from 'src/app/core/models/interfaces';
 
 @Component({
   selector: 'app-question-type-switch-panel',
@@ -21,13 +20,13 @@ import { QuestionsTypes } from 'src/app/core/models/interfaces';
 export class QuestionTypeSwitchPanelComponent {
   public cardType = CardType;
   public questionTypesList: CardType[] = Object.values(this.cardType);
-  @Input() public questionType: QuestionsTypes | undefined = undefined;
+  @Input() public questionType: CardType | undefined = undefined;
 
-  @Output() radioButtonChange: EventEmitter<QuestionsTypes> =
-    new EventEmitter<QuestionsTypes>();
+  @Output() radioButtonChange: EventEmitter<CardType> =
+    new EventEmitter<CardType>();
   @Output() addAnswer: EventEmitter<void> = new EventEmitter<void>();
 
-  public onChange(type: QuestionsTypes): void {
+  public onChange(type: CardType): void {
     this.questionType = type;
     this.radioButtonChange.emit(type);
   }

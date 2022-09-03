@@ -67,7 +67,7 @@
           mat-raised-button
           color="primary"
           (click)="onEdit()"
-          [disabled]="!form.valid"
+          [disabled]="!isValidAnswers || !form.valid"
         >
           Submit
         </button>

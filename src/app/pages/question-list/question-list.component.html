@@ -1,72 +1,16 @@
 <div class="question-list-page">
-  <div class="field">
-    <mat-card *ngFor="let card of unanswered">
-      <mat-card-title>Question card{{ card.id }}</mat-card-title>
-      <mat-card-subtitle
-        >Creation Date: {{ card.date | date: "medium" }}</mat-card-subtitle
-      >
-      <p>{{ card.question }}</p>
-      <app-single-card
-        *ngIf="card.type === cardType.single"
-        [card]="card"
-        (change)="onChange($event)"
-      ></app-single-card>
-      <app-multiple-card
-        *ngIf="card.type === cardType.multiple"
-        [card]="card"
-        (change)="onChange($event)"
-      ></app-multiple-card>
-      <app-open-card
-        *ngIf="card.type === cardType.open"
-        [card]="card"
-        (change)="onChange($event)"
-      ></app-open-card>
-      <mat-card-actions align="end">
-        <button
-          mat-raised-button
-          color="primary"
-          type="submit"
-          form="unanswered"
-          (click)="onSubmit(card)"
-          [disabled]="isSubmitDisabled(card.id)"
-        >
-          Submit
-        </button>
-      </mat-card-actions>
-    </mat-card>
+  <app-questions-block
+    class="field"
+    [cards]="unanswered"
+    (submit)="onSubmit($event)"
+  >
     <p class="field__title">Unanswered questions</p>
-  </div>
-
-  <div class="field field--answered">
-    <mat-card *ngFor="let card of answered">
-      <mat-card-title>Question card №{{ card.id }}</mat-card-title>
-      <mat-card-subtitle>
-        Creation Date: {{ card.date | date: "medium" }} <br />
-        Answer date:
-        {{ card.answerDate | date: "medium" }}
-      </mat-card-subtitle>
-      <p>{{ card.question }}</p>
-      <app-single-card
-        *ngIf="card.type === cardType.single"
-        [card]="card"
-        (change)="onChange($event)"
-      ></app-single-card>
-      <app-multiple-card
-        *ngIf="card.type === cardType.multiple"
-        [card]="card"
-        (change)="onChange($event)"
-      ></app-multiple-card>
-      <app-open-card
-        *ngIf="card.type === cardType.open"
-        [card]="card"
-        (change)="onChange($event)"
-      ></app-open-card>
-      <mat-card-actions align="end">
-        <button mat-raised-button color="warn" (click)="onUndo(card)">
-          Roll back
-        </button>
-      </mat-card-actions>
-    </mat-card>
+  </app-questions-block>
+  <app-questions-block
+    class="field field--answered"
+    [cards]="answered"
+    (undo)="onUndo($event)"
+  >
     <p class="field__title">Answered questions</p>
-  </div>
+  </app-questions-block>
 </div>
