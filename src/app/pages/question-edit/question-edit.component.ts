@@ -19,7 +19,7 @@ import {
 } from 'src/app/core/models/interfaces';
 import { LocalStorageService } from 'src/app/core/services/localStorage.service';
 import { UnsubscribeService } from 'src/app/core/services/unsubscribe.service';
-import { CardFactory } from 'src/app/core/factories/card';
+import { cardFactory } from 'src/app/core/factories/card';
 
 @Component({
   selector: 'app-question-edit',
@@ -30,7 +30,7 @@ import { CardFactory } from 'src/app/core/factories/card';
 })
 export class QuestionEditComponent implements OnInit {
   public questionType: CardType | undefined = undefined;
-  public card: QuestionCard | null = null;
+  public card: QuestionCard = {} as QuestionCard;
   public isValidAnswers: boolean = true;
   public form: FormGroup = this.fb.group({
     question: ['', Validators.required],
@@ -38,8 +38,8 @@ export class QuestionEditComponent implements OnInit {
     multiples: this.fb.array([]),
     open: this.fb.array([]),
   });
-  private factory: CardFactory = new CardFactory();
-  private cardType: typeof CardType = CardType;
+  public cardType: typeof CardType = CardType;
+  private factory = cardFactory;
   constructor(
     private readonly localStorage: LocalStorageService,
     private readonly router: Router,
@@ -81,10 +81,7 @@ export class QuestionEditComponent implements OnInit {
   }
 
   public onEdit(): void {
-    if (!this.card) {
-      return;
-    }
-    this.card.type = this.questionType;
+    this.createNewCardIfTypeChanged();
     this.card.updateCardByForm(this.form);
     this.localStorage.saveEdit(this.card);
     this.router.navigateByUrl('/manage');
@@ -163,6 +160,13 @@ export class QuestionEditComponent implements OnInit {
     this.singles.clear();
     this.multiples.clear();
     this.open.clear();
+  }
+
+  private createNewCardIfTypeChanged() {
+    if (this.card.type !== this.questionType) {
+      this.card.type = this.questionType;
+      this.card = this.factory.createCard(this.card);
+    }
   }
 
   private isEnoughAnswers(type: CardType | undefined): boolean {
