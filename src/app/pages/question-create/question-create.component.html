@@ -12,7 +12,7 @@
           <mat-label>Input your question</mat-label>
           <input matInput formControlName="question" />
         </mat-form-field>
-        <div formArrayName="singles">
+        <div formArrayName="singles" *ngIf="questionType === cardType.single">
           <div *ngFor="let single of singles.controls; let i = index">
             <div [formGroupName]="i">
               <mat-radio-group
@@ -30,7 +30,10 @@
             </div>
           </div>
         </div>
-        <div formArrayName="multiples">
+        <div
+          formArrayName="multiples"
+          *ngIf="questionType === cardType.multiple"
+        >
           <ul>
             <li *ngFor="let multiple of multiples.controls; let j = index">
               <div [formGroupName]="j">
@@ -44,7 +47,7 @@
             </li>
           </ul>
         </div>
-        <div formArrayName="open">
+        <div formArrayName="open" *ngIf="questionType === cardType.open">
           <div *ngFor="let op of open.controls; let ind = index">
             <mat-form-field appearance="fill">
               <mat-label>input your answer</mat-label>

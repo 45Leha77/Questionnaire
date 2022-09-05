@@ -15,7 +15,7 @@ import {
 } from 'src/app/core/models/interfaces';
 import { LocalStorageService } from 'src/app/core/services/localStorage.service';
 import { UnsubscribeService } from 'src/app/core/services/unsubscribe.service';
-import { CardFactory } from 'src/app/core/factories/card';
+import { cardFactory } from 'src/app/core/factories/card';
 
 @Component({
   selector: 'app-question-create',
@@ -34,8 +34,8 @@ export class QuestionCreateComponent {
     multiples: this.fb.array([]),
     open: this.fb.array([]),
   });
-  private factory: CardFactory = new CardFactory();
-  private cardType: typeof CardType = CardType;
+  public cardType: typeof CardType = CardType;
+  private factory = cardFactory;
   constructor(
     private readonly localStorage: LocalStorageService,
     private readonly router: Router,
@@ -49,7 +49,6 @@ export class QuestionCreateComponent {
       date: Date.now(),
       type: this.questionType,
     };
-
     this.card = this.factory.createCard(cardOptions);
     this.card.updateCardByForm(this.form);
     this.localStorage.addCard(this.card);

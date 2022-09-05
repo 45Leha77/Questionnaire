@@ -12,7 +12,7 @@ import {
 
 const cardType = CardType;
 
-export class CardFactory {
+class CardFactory {
   public type?: CardType;
   public id: number = 0;
   public question: string = '';
@@ -20,8 +20,7 @@ export class CardFactory {
   public isAnswered: boolean = false;
   public answerDate?: number;
   public createCard(options: QuestionCard): QuestionCard {
-    this.type = options.type;
-    switch (this.type) {
+    switch (options.type) {
       case cardType.single:
         return new SingleQuestionCardFactory(options as SingleQuestionCard);
       case cardType.multiple:
@@ -34,7 +33,7 @@ export class CardFactory {
   }
 }
 
-export class SingleQuestionCardFactory
+class SingleQuestionCardFactory
   extends CardFactory
   implements SingleQuestionCard
 {
@@ -82,10 +81,7 @@ class MultipleQuestionCardFactory
   }
 }
 
-export class OpenQuestionCardFactory
-  extends CardFactory
-  implements OpenQuestionCard
-{
+class OpenQuestionCardFactory extends CardFactory implements OpenQuestionCard {
   public openAnswerValue?: string;
   constructor(options: OpenQuestionCard) {
     super();
@@ -99,3 +95,5 @@ export class OpenQuestionCardFactory
     this.question = form.value.question;
   }
 }
+
+export const cardFactory = new CardFactory();
