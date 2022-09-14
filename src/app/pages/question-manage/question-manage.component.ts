@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CardType } from 'src/app/core/enums/card-type';
+import { PageMode } from 'src/app/core/enums/page-mode';
 
 import { QuestionCard } from 'src/app/core/models/interfaces';
 import { LocalStorageService } from 'src/app/core/services/localStorage.service';
@@ -13,6 +14,7 @@ import { LocalStorageService } from 'src/app/core/services/localStorage.service'
 export class QuestionManageComponent {
   public cards: QuestionCard[] = this.localStorage.getCards();
   public cardType = CardType;
+  public pageMode = PageMode;
 
   constructor(private readonly localStorage: LocalStorageService) {}
 

@@ -20,8 +20,8 @@ import { MaterialModule } from 'src/app/material.module';
 export class QuestionTypeSwitchPanelComponent {
   public cardType = CardType;
   public questionTypesList: CardType[] = Object.values(this.cardType);
-  @Input() public questionType: CardType | undefined = undefined;
 
+  @Input() public questionType: CardType | undefined = undefined;
   @Output() radioButtonChange: EventEmitter<CardType> =
     new EventEmitter<CardType>();
   @Output() addAnswer: EventEmitter<void> = new EventEmitter<void>();

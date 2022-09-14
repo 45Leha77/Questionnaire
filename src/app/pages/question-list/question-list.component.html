@@ -1,16 +1,10 @@
 <div class="question-list-page">
-  <app-questions-block
-    class="field"
-    [cards]="unanswered"
-    (submit)="onSubmit($event)"
-  >
+  <app-questions-block class="field">
+    <app-card [cards]="unanswered" (submit)="onSubmit($event)"></app-card>
     <p class="field__title">Unanswered questions</p>
   </app-questions-block>
-  <app-questions-block
-    class="field field--answered"
-    [cards]="answered"
-    (undo)="onUndo($event)"
-  >
+  <app-questions-block class="field field--answered">
+    <app-card [cards]="answered" (undo)="onUndo($event)"></app-card>
     <p class="field__title">Answered questions</p>
   </app-questions-block>
 </div>

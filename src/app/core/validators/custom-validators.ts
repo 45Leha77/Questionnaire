@@ -11,7 +11,7 @@ export function validateCheckBox(
     return null;
   }
   const isAnyCheckboxChecked: number = multipleArray.value.filter(
-    (control: AnswerCheckboxFormValue) => control.inp
+    (control: AnswerCheckboxFormValue) => control.input
   ).length;
   return isAnyCheckboxChecked ? null : { multipleCheckboxRequireOne: true };
 }
@@ -22,7 +22,7 @@ export function validateRadioButton(
   if (!singleArray.value.length) {
     return null;
   }
-  const isAnyRadioChecked: boolean = !!singleArray.value.filter(
+  const isAnyRadioChecked: number = singleArray.value.filter(
     (control: AnswerRadioFormValue) => control.radio
   ).length;
   return isAnyRadioChecked ? null : { multipleCheckboxRequireOne: true };

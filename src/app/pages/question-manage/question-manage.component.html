@@ -10,17 +10,17 @@
       <app-single-card
         *ngIf="card.type === cardType.single"
         [card]="card | singleQuestion"
-        [mode]="'manage'"
+        [mode]="pageMode.manage"
       ></app-single-card>
       <app-multiple-card
         *ngIf="card.type === cardType.multiple"
         [card]="card | multipleQuestion"
-        [mode]="'manage'"
+        [mode]="pageMode.manage"
       ></app-multiple-card>
       <app-open-card
         *ngIf="card.type === cardType.open"
         [card]="card | openQuestion"
-        [mode]="'manage'"
+        [mode]="pageMode.manage"
       ></app-open-card>
       <mat-card-actions align="end">
         <button mat-raised-button color="warn" (click)="onDelete(card.id)">

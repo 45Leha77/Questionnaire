@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "questionaire-ls-app"
+  },
+  "targets": {
+    "questionaire-ls-app": {
+      "hosting": {
+        "questionnaireApp": [
+          "questionaire-ls-app"
+        ]
+      }
+    }
+  }
+}

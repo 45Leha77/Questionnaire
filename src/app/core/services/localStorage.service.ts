@@ -35,9 +35,9 @@ export class LocalStorageService {
     this.setToCards(updatedCards);
   }
 
-  public getCardById(id: number): QuestionCard {
+  public getCardById(id: number): QuestionCard | undefined {
     let cards: QuestionCard[] = this.getCards();
-    return cards.find((card: QuestionCard) => card.id === id)!;
+    return cards.find((card: QuestionCard) => card.id === id);
   }
 
   public saveEdit(card: QuestionCard): void {

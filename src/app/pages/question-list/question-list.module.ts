@@ -7,9 +7,10 @@ import { CardsModule } from 'src/app/components/cards/cards.module';
 import { QuestionListRoutingModule } from './question-list-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { QuestionsBlockComponent } from './questions-block/questions-block.component';
+import { CardComponent } from './questions-block/card/card.component';
 
 @NgModule({
-  declarations: [QuestionListComponent, QuestionsBlockComponent],
+  declarations: [QuestionListComponent, QuestionsBlockComponent, CardComponent],
   imports: [
     CommonModule,
     FormsModule,

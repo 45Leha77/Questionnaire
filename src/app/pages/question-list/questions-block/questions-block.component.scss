@@ -2,14 +2,10 @@
 
 .field {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   justify-content: flex-end;
   gap: 20px;
   &__title {
     @include sectionTitleStyles;
   }
-}
-
-mat-card {
-  @include cardStyles;
 }
