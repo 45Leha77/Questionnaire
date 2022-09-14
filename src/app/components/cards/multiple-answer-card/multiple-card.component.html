@@ -3,7 +3,7 @@
     <ul>
       <li *ngFor="let answer of answers.controls; let j = index">
         <div [formGroupName]="j">
-          <mat-checkbox formControlName="inp">
+          <mat-checkbox formControlName="input">
             {{ answer.value.text }}
           </mat-checkbox>
         </div>

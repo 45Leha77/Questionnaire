@@ -1,4 +1,4 @@
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { CardType } from '../enums/card-type';
 
 export interface Answer {
@@ -12,7 +12,7 @@ export interface CommonQuestionCard {
   date: number;
   isAnswered: boolean;
   answerDate?: number;
-  updateCardByForm: (form: FormGroup<any>) => void;
+  updateCardByForm: (form: FormGroup) => void;
 }
 
 export interface SingleQuestionCard extends CommonQuestionCard {
@@ -41,7 +41,7 @@ export interface CardValidator {
 
 export interface AnswerCheckboxFormValue {
   text: string;
-  inp: boolean;
+  input: boolean;
 }
 
 export interface AnswerRadioFormValue {
@@ -49,12 +49,16 @@ export interface AnswerRadioFormValue {
   radio: boolean;
 }
 
-export interface MultipleQuestionFormArray {
-  text: FormControl<string | null>;
-  input: FormControl<string | null>;
+export interface MultipleQuestionFormArray<T = string, I = string> {
+  text: FormControl<T | null>;
+  input: FormControl<I | null>;
 }
 
-export interface SingleQuestionFormArray {
-  text: FormControl<string | null>;
-  radio: FormControl<string | null>;
+export interface SingleQuestionFormArray<T = string, R = string> {
+  text: FormControl<T | null>;
+  radio: FormControl<R | null>;
+}
+
+export interface CardForm {
+  answers: FormArray;
 }

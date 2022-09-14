@@ -1,24 +1,23 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   Input,
   OnInit,
-  Output,
 } from '@angular/core';
-import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
 import { filter, takeUntil, tap } from 'rxjs';
 
 import { validateCheckBox } from 'src/app/core/validators/custom-validators';
 import {
-  QuestionCard,
-  CardValidator,
   Answer,
   AnswerCheckboxFormValue,
   MultipleQuestionCard,
+  MultipleQuestionFormArray,
 } from 'src/app/core/models/interfaces';
 import { UnsubscribeService } from 'src/app/core/services/unsubscribe.service';
 import { Required } from 'src/app/shared/decorators/required.decorator';
+import { PageMode } from 'src/app/core/enums/page-mode';
+import { CardBase } from '../card-base';
 
 @Component({
   selector: 'app-multiple-card',
@@ -27,28 +26,22 @@ import { Required } from 'src/app/shared/decorators/required.decorator';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [UnsubscribeService],
 })
-export class MultipleCardComponent implements OnInit {
+export class MultipleCardComponent extends CardBase implements OnInit {
   @Input() @Required public card!: MultipleQuestionCard;
-  @Input() public mode: string = 'list';
-  @Output() public change: EventEmitter<CardValidator> =
-    new EventEmitter<CardValidator>();
-
-  public form: FormGroup = this.fb.group({
-    answers: this.fb.array([], validateCheckBox),
-  });
-
-  constructor(
-    private fb: FormBuilder,
-    private unsubscribe: UnsubscribeService
-  ) {}
+  constructor(private unsubscribe: UnsubscribeService) {
+    super();
+  }
 
   ngOnInit(): void {
     this.card.multiple.forEach((answer, index) => {
       this.addAnswer(answer, index);
     });
+    this.form.controls.answers.addValidators(validateCheckBox);
     this.observeForm();
   }
-  get answers(): FormArray {
+  get answers(): FormArray<
+    FormGroup<MultipleQuestionFormArray<string, object>>
+  > {
     return this.form.get('answers') as FormArray;
   }
 
@@ -59,7 +52,7 @@ export class MultipleCardComponent implements OnInit {
         tap((value) => {
           const list: number[] = value.answers.map(
             (el: AnswerCheckboxFormValue, index: number): number => {
-              return el.inp ? index : -1;
+              return el.input ? index : -1;
             }
           );
           list.length ? (this.card.multipleValue = list) : null;
@@ -71,17 +64,17 @@ export class MultipleCardComponent implements OnInit {
   }
 
   private addAnswer(answer: Answer, index: number): void {
-    let inp: object | [] = { value: '', disabled: true };
-    if (this.mode === 'list') {
+    let input: object | [] = { value: '', disabled: true };
+    if (this.mode === PageMode.list) {
       if (this.card.isAnswered) {
-        inp = {
+        input = {
           value: this.card.multipleValue?.indexOf(index) != -1,
           disabled: true,
         };
       } else {
-        inp = [false];
+        input = [false];
       }
     }
-    this.answers.push(this.fb.group({ text: answer.value, inp }));
+    this.answers.push(this.fb.group({ text: answer.value, input }));
   }
 }

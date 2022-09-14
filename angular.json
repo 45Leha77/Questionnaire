@@ -105,6 +105,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "questionnaireApp:build:production",
+            "firebaseProject": "questionaire-ls-app",
+            "firebaseHostingSite": "questionaire-ls-app"
+          }
         }
       }
     }

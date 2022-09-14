@@ -1,18 +1,15 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   Input,
   OnInit,
-  Output,
 } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  CardValidator,
-  OpenQuestionCard,
-} from 'src/app/core/models/interfaces';
+import { FormArray, FormControl, Validators } from '@angular/forms';
+import { OpenQuestionCard } from 'src/app/core/models/interfaces';
 import { UnsubscribeService } from 'src/app/core/services/unsubscribe.service';
 import { takeUntil, tap } from 'rxjs';
+import { PageMode } from 'src/app/core/enums/page-mode';
+import { CardBase } from '../card-base';
 import { Required } from 'src/app/shared/decorators/required.decorator';
 
 @Component({
@@ -22,26 +19,19 @@ import { Required } from 'src/app/shared/decorators/required.decorator';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [UnsubscribeService],
 })
-export class OpenCardComponent implements OnInit {
+export class OpenCardComponent extends CardBase implements OnInit {
   @Input() @Required public card!: OpenQuestionCard;
-  @Input() public mode: string = 'list';
-  @Output() public change = new EventEmitter<CardValidator>();
 
-  public form: FormGroup = this.fb.group({
-    answers: this.fb.array([]),
-  });
-
-  constructor(
-    private fb: FormBuilder,
-    private unsubscribe: UnsubscribeService
-  ) {}
+  constructor(private unsubscribe: UnsubscribeService) {
+    super();
+  }
 
   ngOnInit(): void {
     this.addAnswer();
     this.observeForm();
   }
 
-  get answers(): FormArray<any> {
+  get answers(): FormArray<FormControl<string | null>> {
     return this.form.get('answers') as FormArray;
   }
 
@@ -58,11 +48,11 @@ export class OpenCardComponent implements OnInit {
   }
 
   private addAnswer(): void {
-    if (this.mode === 'list') {
+    if (this.mode === PageMode.list) {
       return this.card.isAnswered
         ? this.answers.push(
             this.fb.control({
-              value: this.card.openAnswerValue,
+              value: this.card.openAnswerValue as string,
               disabled: true,
             })
           )
